@@ -1,0 +1,149 @@
+{% load i18n cms_tags menu_tags leprikon_tags rocketchat sekizai_tags staticfiles ganalytics %}
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} &mdash; Dům dětí a mládeže Mikulov, příspěvková organizace</title>
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek, národopisné soubory, Mikulov, kroužky, děti, dům dětí a mládeže" />
+    <meta name="description" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek aj." />
+    <!--[if IE]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <link href="{% static 'css/ie.css' %}" rel="stylesheet" type="text/css" />
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap/css/bootstrap.min.css' %}"/>
+    {% if backends %}
+    <!-- Bootstrap social -->
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap-social.min.css' %}"/>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/css/layout.css' %}?1"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style.css' %}" />
+    {% render_block "css" %}
+    <script src="{% static 'js/clearbox.js' %}?dir=http://www.ddmmikulov.cz/js/clearbox&amp;lng=cz&amp;config=default" type="text/javascript"></script>
+    <link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-touch-icon-57x57.png' %}">
+    <link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-touch-icon-60x60.png' %}">
+    <link rel="icon" type="image/png" href="{% static 'favicon-16x16.png' %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static 'favicon-32x32.png' %}" sizes="32x32">
+    <meta name="msapplication-TileColor" content="#da532c">
+
+    <script src="{% static 'leprikon/lib/jquery.min.js' %}"></script>
+</head>
+
+<body class="subpage-info">
+    {% cms_toolbar %}
+    <div id="site-container">
+        <div class="web-container">
+            <header class="page-header clearfix">
+                <h1>
+                    <a href="http://www.ddmmikulov.cz/cz/" class="logo" title="DDM Mikulov">
+                        <img src="{% static 'img/logo.png' %}" alt="DDM Mikulov">
+                    </a>
+                </h1>
+
+                <div class="related-sites">
+                    <span class="mail"><a href="mailto:info@ddmmikulov.cz">info@ddmmikulov.cz</a></span>
+                    <span class="telefon">723 441 495, 702 013 805</span>
+
+                    <div class="search">
+                        <form action="http://www.ddmmikulov.cz/cz/hledat/" method="post">
+                        <input type="text" name="search" placeholder="Hledat…" />
+                        <input type="submit" value="" />
+                        </form>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <nav class="navigation">
+                    <ul>
+                        <li class='menu36'><a href="http://www.ddmmikulov.cz/cz/" title='Domů' >Domů</a></li>
+                        <li class='menu9'><a href="/akce/" title='Akce' >Akce</a></li>
+                        <li class='menu24'><a href="/krouzky/" title='Kroužky' >Kroužky</a></li>
+                        <li class='menu65'>
+                            <a href="javascript:" title='Galerie' >Galerie</a>
+                            <ul>
+                                <li class='menu154'><a href="http://www.ddmmikulov.cz/cz/galerie-2018" title='Galerie 2018' >Galerie 2018</a>
+                                <li class='menu137'><a href="http://www.ddmmikulov.cz/cz/galerie-2017" title='Galerie 2017' >Galerie 2017</a>
+                                <li class='menu113'><a href="http://www.ddmmikulov.cz/cz/galerie-2016" title='Galerie 2016' >Galerie 2016</a>
+                                <li class='menu107'><a href="http://www.ddmmikulov.cz/cz/galerie-2015" title='Galerie 2015' >Galerie 2015</a>
+                                <li class='menu106'><a href="http://www.ddmmikulov.cz/cz/galerie-2014" title='Galerie 2014' >Galerie 2014</a>
+                            </ul>
+                        </li>
+                        <li class='menu8'>
+                            <a href="javascript:" title='Tábory' >Tábory</a>
+                            <ul>
+                                <li class='menu152'><a href="/tabory/" title='Nabídka letních táborů' >Nabídka letních táborů</a>
+                                <li class='menu151'><a href="http://www.ddmmikulov.cz/cz/prihlasky-k-letnim-taborum" title='Přihlášky k letním táborům' >Přihlášky k letním táborům</a>
+                                <li class='menu143'><a href="http://www.ddmmikulov.cz/cz/vseobecne-informace-k-taborum" title='Všeobecné informace k táborům' >Všeobecné informace k táborům</a>
+                                <li class='menu153'><a href="http://www.ddmmikulov.cz/cz/informace-k-prihlasovani-a-platbam-" title='Informace k přihlašování a platbám ' >Informace k přihlašování a platbám </a>
+                            </ul>
+                        </li>
+                        <li class='menu64'>
+                            <a href="javascript:" title='Dokumenty' >Dokumenty</a>
+                            <ul>
+                                <li class='menu68'><a href="http://www.ddmmikulov.cz/cz/prihlaska-do-krouzku-formular" title='Přihláška do kroužku - formulář' >Přihláška do kroužku - formulář</a>
+                                <li class='menu132'><a href="http://www.ddmmikulov.cz/cz/odhlaska-ze-zajmoveho-vzdelani" title='Odhláška ze zájmového vzdělání' >Odhláška ze zájmového vzdělání</a>
+                                <li class='menu122'><a href="http://www.ddmmikulov.cz/cz/variabilni-symboly-krouzku-a-cislo-uctu" title='Variabilní symboly kroužků a číslo účtu' >Variabilní symboly kroužků a číslo účtu</a>
+                                <li class='menu163'><a href="http://www.ddmmikulov.cz/cz/prava-a-povinnosti-ucastnika-zv" title='Práva a povinnosti účastníka ZV' >Práva a povinnosti účastníka ZV</a>
+                                <li class='menu162'><a href="http://www.ddmmikulov.cz/cz/vnitrni-rad" title='Vnitřní řád' >Vnitřní řád</a>
+                                <li class='menu159'><a href="http://www.ddmmikulov.cz/cz/prilohy-svp" title='Přílohy ŠVP' >Přílohy ŠVP</a>
+                                <li class='menu156'><a href="http://www.ddmmikulov.cz/cz/zprava-o-poskytovani-informaci-podle-zakona-c--106-1999-sb---o-svobodnem-pristupu-k-informacim" title='Zpráva o poskytování informací podle zákona č. 106/1999 Sb.  o svobodném přístupu k informacím' >Zpráva o poskytování informací podle zákona č. 106/1999 Sb.  o svobodném přístupu k informacím</a>
+                                <li class='menu160'><a href="http://www.ddmmikulov.cz/cz/zprava-o-cinnosti-ddm-za-rok-2016" title='Zpráva o činnosti DDM za rok 2016' >Zpráva o činnosti DDM za rok 2016</a>
+                                <li class='menu155'><a href="http://www.ddmmikulov.cz/cz/zrizovaci-listina" title='Zřizovací listina' >Zřizovací listina</a>
+                                <li class='menu161'><a href="http://www.ddmmikulov.cz/cz/zprava-o-cinnosti-ddm-za-rok-2017" title='Zpráva o činnosti DDM za rok 2017' >Zpráva o činnosti DDM za rok 2017</a>
+                                <li class='menu157'><a href="http://www.ddmmikulov.cz/cz/informace-podle-zakona-c--101-2000-sb-" title='Informace podle zákona č. 101/2000 Sb.' >Informace podle zákona č. 101/2000 Sb.</a>
+                                <li class='menu133'><a href="http://www.ddmmikulov.cz/cz/skolni-vzdelavaci-program-2018" title='Školní vzdělávací program 2018' >Školní vzdělávací program 2018</a>
+                                <li class='menu148'><a href="http://www.ddmmikulov.cz/cz/manual-na-vyplneni-prihlasky-do-krouzku" title='Manuál na vyplnění přihlášky do kroužku' >Manuál na vyplnění přihlášky do kroužku</a>
+                                <li class='menu164'><a href="http://www.ddmmikulov.cz/cz/gdpr" title='GDPR' >GDPR</a>
+                            </ul>
+                        </li>
+                        <li class='menu1'>
+                            <a href="javascript:" title='Kontakt' >Kontakt</a>
+                            <ul>
+                                <li class='menu102'><a href="http://www.ddmmikulov.cz/cz/kontaktni-udaje" title='Kontaktní údaje' >Kontaktní údaje</a>
+                                <li class='menu103'><a href="http://www.ddmmikulov.cz/cz/informace" title='Informace' >Informace</a>
+                                <li class='menu142'><a href="http://www.ddmmikulov.cz/cz/sponzori" title='Sponzoři' >Sponzoři</a>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            {% block base_content %}{% endblock %}
+            <div class="clearfix"></div>
+        </div>
+        <footer class="page-footer">
+            <div class="web-container">
+                <div class="logo-footer">
+                    <a href="http://www.ddmmikulov.cz/cz/" class="logo" title="DDM Mikulov">
+                        <img src="{% static 'img/logo_footer.png' %}" alt="DDM Mikulov">
+                    </a>
+                </div>
+
+                <div class="contact">
+                    <p>
+                        Dům dětí a mládeže Mikulov<br />
+                        Mikulov, Svobody 241/6<br />
+                        mail: <a href="mailto:info@ddmmikulov.cz">info@ddmmikulov.cz</a><br />
+                        telefon: 723 441 495, 702 013 805
+                    </p>
+                </div>
+
+                <div class="fb-footer">
+                    <p>
+                    <a class="dom" href="http://www.ddmmikulov.cz/cz/">www.ddmmikulov.cz</a>
+                    <a href="https://www.facebook.com/pages/DDM-Mikulov/645359742241123"><img src="{% static 'img/fb.png' %}" alt="Facebook" /></a>
+                    </p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </footer>
+    </div>
+</body>
+<script type="text/javascript" src="{% static 'leprikon/lib/bootstrap/js/bootstrap.min.js' %}"></script>
+
+{% render_block "js" %}
+
+{% livechat %}
+
+</html>

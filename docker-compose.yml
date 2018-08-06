@@ -1,0 +1,49 @@
+version: '3.4'
+services:
+
+  leprikon:
+    image: misli/ddmmikulov
+    depends_on:
+      - db
+      - memcached
+    environment:
+      DEBUG: TEMPLATE
+      SECRET_KEY: secretkey
+      DATABASE_ENGINE: django.db.backends.mysql
+      DATABASE_HOST: ''
+      DATABASE_NAME: ddmmikulov
+      DATABASE_PASSWORD: password-db
+      DATABASE_USER: ddmmikulov
+      MEMCACHED_LOCATION: memcached:11211
+    ports:
+      - 127.0.0.1:80:80
+    restart: unless-stopped
+    volumes:
+      - ./.ipython:/root/.ipython:z
+      - ./ddmmikulov:/app/ddmmikulov:ro
+      - ./data:/app/data:z
+      - ./media:/app/htdocs/media:z
+      - db:/var/run/mysqld:z
+
+  db:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: ddmmikulov
+      MYSQL_PASSWORD: password-db
+      MYSQL_ROOT_PASSWORD: password-db-root
+      MYSQL_USER: ddmmikulov
+    ports:
+      - 127.0.0.1:3306:3306
+    restart: unless-stopped
+    volumes:
+      - db:/var/run/mysqld:z
+      - ./mysql:/var/lib/mysql:z
+
+  memcached:
+    image: memcached
+    ports:
+      - 127.0.0.1:11211:11211
+    restart: unless-stopped
+
+volumes:
+  db:

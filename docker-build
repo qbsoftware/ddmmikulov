@@ -1,0 +1,18 @@
+#!/bin/bash
+
+NAME="$(basename $(dirname $(realpath $0)))"
+
+# choose image tag
+if git symbolic-ref HEAD | grep -q refs/heads/master; then
+    TAG=latest
+else
+    TAG=testing
+fi
+
+set -- "$@" --build-arg LEPRIKON_TAG=${LEPRIKON_TAG:-$TAG} --tag misli/$NAME:$TAG .
+
+if [ -w /var/run/docker.sock ]; then
+    exec docker build "$@"
+else
+    exec sudo docker build "$@"
+fi

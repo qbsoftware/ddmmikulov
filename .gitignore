@@ -1,0 +1,11 @@
+*.pyc
+*.pyo
+*.swp
+*~
+/.ipython
+/data
+/docker-compose.*.yml
+/env
+/htdocs
+/media
+/mysql*
