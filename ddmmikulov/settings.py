@@ -19,6 +19,8 @@ INSTALLED_APPS = [
     'aldryn_bootstrap3',
 ]
 
+ROOT_URLCONF = 'ddmmikulov.urls'
+
 CMS_TEMPLATES = [
     ('default.html', 'Výchozí'),
 ]
