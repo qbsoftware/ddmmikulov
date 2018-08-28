@@ -141,6 +141,10 @@ background-color: #ff8400;
 background-color: #69358d;
 }
 
+.page-header .navigation ul li.menu167 a{
+background-color: #279516;
+}
+
 #uvod-text{
 background: url(../img/lista.png) repeat-x top;
 width: 100%;
