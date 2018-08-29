@@ -1,4 +1,4 @@
-ARG LEPRIKON_TAG=latest
+ARG LEPRIKON_TAG=testing
 FROM leprikon/leprikon:$LEPRIKON_TAG
 
 MAINTAINER Jakub Dorňák <jakub.dornak@misli.com>
