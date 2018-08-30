@@ -1,4 +1,4 @@
 {% extends 'default.html' %}
 {% load leprikon_tags %}
 
-{% block h2 %}{{ title|first_upper }}{% endblock %}
+{% block h2 %}{% block title %}{{ title|first_upper }}{% endblock %}{% endblock %}
