@@ -97,7 +97,12 @@
                     <ul>
                         <li class='menu36'><a href="http://www.ddmmikulov.cz/cz/" title='Domů' >Domů</a></li>
                         <li class='menu9'><a href="/cz/akce/" title='Akce' >Akce</a></li>
-                        <li class='menu24'><a href="/cz/krouzky/" title='Kroužky' >Kroužky</a></li>
+                        <li class='menu24'>
+                            <a href="javascript:" title='Kroužky' >Kroužky</a>
+                            <ul>
+                                {% show_menu_below_id "leprikon" 0 100 0 1 'menu_courses.html' %}
+                            </ul>
+                        </li>
                         <li class='menu65'>
                             <a href="javascript:" title='Galerie' >Galerie</a>
                             <ul>
