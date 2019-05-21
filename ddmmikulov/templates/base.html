@@ -1,4 +1,4 @@
-{% load i18n cms_tags menu_tags leprikon_tags rocketchat sekizai_tags staticfiles ganalytics %}
+{% load i18n cache cms_tags menu_tags leprikon_tags rocketchat sekizai_tags staticfiles ganalytics %}
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -103,29 +103,12 @@
                                 {% show_menu_below_id "leprikon" 0 100 0 1 'menu_courses.html' %}
                             </ul>
                         </li>
-                        <li class='menu65'>
-                            <a href="javascript:" title='Galerie' >Galerie</a>
-                            <ul>
-                                <li class='menu154'><a href="http://www.ddmmikulov.cz/cz/galerie-2018" title='Galerie 2018' >Galerie 2018</a>
-                                <li class='menu137'><a href="http://www.ddmmikulov.cz/cz/galerie-2017" title='Galerie 2017' >Galerie 2017</a>
-                                <li class='menu113'><a href="http://www.ddmmikulov.cz/cz/galerie-2016" title='Galerie 2016' >Galerie 2016</a>
-                                <li class='menu107'><a href="http://www.ddmmikulov.cz/cz/galerie-2015" title='Galerie 2015' >Galerie 2015</a>
-                                <li class='menu106'><a href="http://www.ddmmikulov.cz/cz/galerie-2014" title='Galerie 2014' >Galerie 2014</a>
-                            </ul>
-                        </li>
+                        {% cache 300 menu %}
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu65 ")]' %}
                         <li class='menu8'><a href="/cz/tabory/" title='Tábory' >Tábory</a></li>
-                        <li class='menu64'>
-                            <a href="javascript:" title='Dokumenty' >Dokumenty</a>
-                            <ul><li class="menu165"><a href="https://www.ddmmikulov.cz/cz/jak-se-prihlasit-do-krouzku" title="Jak se přihlásit do kroužku?">Jak se přihlásit do kroužku?</a></li><li class="menu132"><a href="https://www.ddmmikulov.cz/cz/odhlaska-ze-zajmoveho-vzdelani" title="Odhláška ze zájmového vzdělání">Odhláška ze zájmového vzdělání</a></li><li class="menu166"><a href="https://www.ddmmikulov.cz/cz/gdpr-k-zajmovemu-vzdelavani" title="GDPR k zájmovému vzdělávání">GDPR k zájmovému vzdělávání</a></li><li class="menu163"><a href="https://www.ddmmikulov.cz/cz/prava-a-povinnosti-ucastnika-zv" title="Práva a povinnosti účastníka ZV">Práva a povinnosti účastníka ZV</a></li><li class="menu162"><a href="https://www.ddmmikulov.cz/cz/vnitrni-rad" title="Vnitřní řád">Vnitřní řád</a></li><li class="menu159"><a href="https://www.ddmmikulov.cz/cz/prilohy-svp" title="Přílohy ŠVP">Přílohy ŠVP</a></li><li class="menu156"><a href="https://www.ddmmikulov.cz/cz/zprava-o-poskytovani-informaci-podle-zakona-c--106-1999-sb---o-svobodnem-pristupu-k-informacim" title="Zpráva o poskytování informací podle zákona č. 106/1999 Sb.  o svobodném přístupu k informacím">Zpráva o poskytování informací podle zákona č. 106/1999 Sb.  o svobodném přístupu k informacím</a></li><li class="menu160"><a href="https://www.ddmmikulov.cz/cz/zprava-o-cinnosti-ddm-za-rok-2016" title="Zpráva o činnosti DDM za rok 2016">Zpráva o činnosti DDM za rok 2016</a></li><li class="menu155"><a href="https://www.ddmmikulov.cz/cz/zrizovaci-listina" title="Zřizovací listina">Zřizovací listina</a></li><li class="menu161"><a href="https://www.ddmmikulov.cz/cz/zprava-o-cinnosti-ddm-za-rok-2017" title="Zpráva o činnosti DDM za rok 2017">Zpráva o činnosti DDM za rok 2017</a></li><li class="menu157"><a href="https://www.ddmmikulov.cz/cz/informace-podle-zakona-c--101-2000-sb-" title="Informace podle zákona č. 101/2000 Sb.">Informace podle zákona č. 101/2000 Sb.</a></li><li class="menu133"><a href="https://www.ddmmikulov.cz/cz/skolni-vzdelavaci-program-2018" title="Školní vzdělávací program 2018">Školní vzdělávací program 2018</a></li><li class="menu148"><a href="https://www.ddmmikulov.cz/cz/manual-na-vyplneni-prihlasky-do-krouzku" title="Manuál na vyplnění přihlášky do kroužku">Manuál na vyplnění přihlášky do kroužku</a></li><li class="menu164"><a href="https://www.ddmmikulov.cz/cz/gdpr" title="GDPR">GDPR</a></li></ul>
-                        </li>
-                        <li class='menu1'>
-                            <a href="javascript:" title='Kontakt' >Kontakt</a>
-                            <ul>
-                                <li class='menu102'><a href="http://www.ddmmikulov.cz/cz/kontaktni-udaje" title='Kontaktní údaje' >Kontaktní údaje</a>
-                                <li class='menu103'><a href="http://www.ddmmikulov.cz/cz/informace" title='Informace' >Informace</a>
-                                <li class='menu142'><a href="http://www.ddmmikulov.cz/cz/sponzori" title='Sponzoři' >Sponzoři</a>
-                            </ul>
-                        </li>
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu64 ")]' %}
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu1 ")]' %}
+                        {% endcache %}
                         <li class='menu167'>
                             <a href="javascript:" title='Přihlašování' >Přihlašování</a>
                             <ul>
