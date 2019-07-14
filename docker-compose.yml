@@ -3,47 +3,80 @@ services:
 
   leprikon:
     image: misli/ddmmikulov
+    build: .
     depends_on:
-      - db
       - memcached
+      - mysql
+      - smtp
     environment:
-      DEBUG: TEMPLATE
       SECRET_KEY: secretkey
       DATABASE_ENGINE: django.db.backends.mysql
       DATABASE_HOST: ''
       DATABASE_NAME: ddmmikulov
-      DATABASE_PASSWORD: password-db
+      DATABASE_PASSWORD: dbpassword
       DATABASE_USER: ddmmikulov
+      EMAIL_HOST: smtp
+      EMAIL_HOST_PASSWORD: emailpassword
+      EMAIL_HOST_USER: ddmmikulov
+      EMAIL_SUBJECT_PREFIX: '[DDM Mikulov]'
       MEMCACHED_LOCATION: memcached:11211
+      ROCKETCHAT_URL: https://chat.ddmmikulov.cz
+      SERVER_EMAIL: DDM Mikulov <info@ddmmikulov.cz>
     ports:
-      - 127.0.0.1:80:80
-    restart: unless-stopped
+      - 80:80/tcp
     volumes:
-      - ./.ipython:/root/.ipython:z
-      - ./ddmmikulov:/app/ddmmikulov:ro
-      - ./data:/app/data:z
-      - ./media:/app/htdocs/media:z
-      - db:/var/run/mysqld:z
-
-  db:
-    image: mariadb
-    environment:
-      MYSQL_DATABASE: ddmmikulov
-      MYSQL_PASSWORD: password-db
-      MYSQL_ROOT_PASSWORD: password-db-root
-      MYSQL_USER: ddmmikulov
-    ports:
-      - 127.0.0.1:3306:3306
-    restart: unless-stopped
-    volumes:
-      - db:/var/run/mysqld:z
-      - ./mysql:/var/lib/mysql:z
+      - ./.ipython:/root/.ipython
+      - ./data:/app/data
+      - ./media:/app/htdocs/media
+      - mysql:/var/run/mysqld
 
   memcached:
     image: memcached
+
+  mongo:
+    image: mongo
+    command: mongod --smallfiles --oplogSize 128 --replSet rs0
+    hostname: mongo
+    volumes:
+      - /tmp
+      - ./mongo:/data/db
+
+  mysql:
+    image: mariadb
+    environment:
+      MYSQL_DATABASE: ddmmikulov
+      MYSQL_PASSWORD: dbpassword
+      MYSQL_ROOT_PASSWORD: rootdbpassword
+      MYSQL_USER: ddmmikulov
+    volumes:
+      - mysql:/var/run/mysqld
+      - ./mysql:/var/lib/mysql
+
+  rocketchat:
+    image: rocketchat/rocket.chat
+    command: bash -c 'for i in `seq 1 30`; do node main.js && s=$$? && break || s=$$?; echo "Tried $$i times. Waiting 5 secs..."; sleep 5; done; (exit $$s)'
+    depends_on:
+      - mongo
+      - smtp
+    environment:
+      MONGO_URL: mongodb://mongo:27017/rocketchat
+      MONGO_OPLOG_URL: mongodb://mongo:27017/local
+      PORT: '3000'
+      ROOT_URL: https://chat.ddmmikulov.cz
     ports:
-      - 127.0.0.1:11211:11211
-    restart: unless-stopped
+    - 127.0.0.1:10041:3000/tcp
+    volumes:
+    - ./uploads:/app/uploads
+
+  smtp:
+    image: catatnight/postfix
+    environment:
+      maildomain: ddmmikulov.cz
+      smtp_user: ddmmikulov:emailpassword
+    stdin_open: true
+    volumes:
+    - ./dkim:/etc/opendkim/domainkeys
+    tty: true
 
 volumes:
-  db:
+  mysql:
