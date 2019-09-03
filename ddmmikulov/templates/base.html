@@ -54,41 +54,8 @@
                 </div>
 
                 <div class="related-sites" style="text-align: right; padding-right: 15px;">
-                    {% if request.user.is_authenticated %}
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="user_menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                            {{ request.user.get_full_name | default:request.user.get_username }}
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="user_menu">
-                            <li><a href="{% url_with_back 'leprikon:user_update' %}">{% trans 'Edit' %}</a></li>
-                            <li><a href="{% url_with_back 'leprikon:user_password' %}">{% trans 'Change password' %}</a></li>
-                            <li><a href="{% url_with_back 'leprikon:user_logout' %}">{% trans 'Log out' %}</a></li>
-                            {% if 'google-plus' in backends.not_associated %}
-                            <li>
-                                <a href="{% url 'social:begin' 'google-plus' %}?next={{ next }}">
-                                    <button class="btn btn-block btn-sm btn-google">
-                                        <i class="fa fa-google pull-left"></i>
-                                        {% trans 'Link with your Google account' %}
-                                    </button>
-                                </a>
-                            </li>
-                            {% endif %}
-                            {% if 'facebook' in backends.not_associated %}
-                            <li>
-                                <a href="{% url 'social:begin' 'facebook' %}?next={{ next }}">
-                                    <button class="btn btn-social btn-sm btn-facebook">
-                                        <i class="fa fa-facebook pull-left"></i>
-                                        {% trans 'Link with your Facebook account' %}
-                                    </button>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                    </div>
-                    {% else %}
-                    <a class="btn btn-default" href="{% url_with_back 'leprikon:user_login' %}">{% trans 'Log in' %}</a>
-                    {% endif %}
+                    {% school_year_form %}
+                    {% include 'leprikon/user_dropdown.html' %}
                 </div>
 
                 <div class="clearfix"></div>
@@ -96,23 +63,30 @@
                 <nav class="navigation">
                     <ul>
                         <li class='menu36'><a href="http://www.ddmmikulov.cz/cz/" title='Domů' >Domů</a></li>
-                        <li class='menu9'><a href="/cz/akce/" title='Akce' >Akce</a></li>
+                        <li class='menu9'><a href="/cz/akce/" title="Akce">Akce</a></li>
                         <li class='menu24'>
-                            <a href="javascript:" title='Kroužky' >Kroužky</a>
+                            <a href="javascript:" title="Kroužky">Kroužky</a>
                             <ul>
-                                {% show_menu_below_id "leprikon" 0 100 0 1 'menu_courses.html' %}
+                                {% show_menu_below_id "krouzky" 0 100 0 1 %}
                             </ul>
                         </li>
-                        {% cache 300 menu %}
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu65 ")]' %}
-                        <li class='menu8'><a href="/cz/tabory/" title='Tábory' >Tábory</a></li>
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu64 ")]' %}
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu1 ")]' %}
+                        {% cache 300 menu65 %}
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu65 ")]' '/http:/https:/' %}
+                        {% endcache %}
+                        <li class='menu8'>
+                            <a href="javascript:" title="Tábory">Tábory</a>
+                            <ul>
+                                {% show_menu_below_id "tabory" 0 100 0 1 %}
+                            </ul>
+                        </li>
+                        {% cache 300 menu64-1 %}
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu64 ")]' '/http:/https:/' %}
+                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu1 ")]' '/http:/https:/' %}
                         {% endcache %}
                         <li class='menu167'>
                             <a href="javascript:" title='Přihlašování' >Přihlašování</a>
                             <ul>
-                                {% show_menu_below_id "leprikon" 0 0 0 1 %}
+                                {% show_menu_below_id "leprikon" 0 100 0 1 %}
                             </ul>
                         </li>
                     </ul>
