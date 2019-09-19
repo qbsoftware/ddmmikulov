@@ -1,0 +1,1 @@
+letsencrypt certonly --webroot -w /srv/letsencrypt/htdocs -d ddmmikulov.cz -d www.ddmmikulov.cz

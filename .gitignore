@@ -4,8 +4,7 @@
 *~
 /.ipython
 /data
+/dkim
 /docker-compose.*.yml
-/env
-/htdocs
 /media
 /mysql*

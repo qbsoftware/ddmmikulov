@@ -1,4 +1,4 @@
-{% load i18n cache cms_tags menu_tags leprikon_tags rocketchat sekizai_tags staticfiles ganalytics %}
+{% load i18n cache cms_tags menu_tags leprikon_tags sekizai_tags staticfiles ganalytics %}
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -126,7 +126,5 @@
 <script type="text/javascript" src="{% static 'leprikon/lib/bootstrap/js/bootstrap.min.js' %}"></script>
 
 {% render_block "js" %}
-
-{% livechat %}
 
 </html>

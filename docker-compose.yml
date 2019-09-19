@@ -9,7 +9,6 @@ services:
       - mysql
       - smtp
     environment:
-      SECRET_KEY: secretkey
       DATABASE_ENGINE: django.db.backends.mysql
       DATABASE_HOST: ''
       DATABASE_NAME: ddmmikulov
@@ -20,10 +19,11 @@ services:
       EMAIL_HOST_USER: ddmmikulov
       EMAIL_SUBJECT_PREFIX: '[DDM Mikulov]'
       MEMCACHED_LOCATION: memcached:11211
-      ROCKETCHAT_URL: https://chat.ddmmikulov.cz
-      SERVER_EMAIL: DDM Mikulov <info@ddmmikulov.cz>
+      SECRET_KEY: secretkey
+      SERVER_EMAIL: '"DDM Mikulov" <info@ddmmikulov.cz>'
+      SUPERVISORD_RUN: nginx uwsgi
     ports:
-      - 80:80/tcp
+      - 127.0.0.1:10040:80
     volumes:
       - ./.ipython:/root/.ipython
       - ./data:/app/data
@@ -32,14 +32,6 @@ services:
 
   memcached:
     image: memcached
-
-  mongo:
-    image: mongo
-    command: mongod --smallfiles --oplogSize 128 --replSet rs0
-    hostname: mongo
-    volumes:
-      - /tmp
-      - ./mongo:/data/db
 
   mysql:
     image: mariadb
@@ -51,22 +43,6 @@ services:
     volumes:
       - mysql:/var/run/mysqld
       - ./mysql:/var/lib/mysql
-
-  rocketchat:
-    image: rocketchat/rocket.chat
-    command: bash -c 'for i in `seq 1 30`; do node main.js && s=$$? && break || s=$$?; echo "Tried $$i times. Waiting 5 secs..."; sleep 5; done; (exit $$s)'
-    depends_on:
-      - mongo
-      - smtp
-    environment:
-      MONGO_URL: mongodb://mongo:27017/rocketchat
-      MONGO_OPLOG_URL: mongodb://mongo:27017/local
-      PORT: '3000'
-      ROOT_URL: https://chat.ddmmikulov.cz
-    ports:
-    - 127.0.0.1:10041:3000/tcp
-    volumes:
-    - ./uploads:/app/uploads
 
   smtp:
     image: catatnight/postfix
