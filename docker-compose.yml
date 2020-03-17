@@ -8,24 +8,27 @@ services:
       - memcached
       - mysql
       - smtp
+      - chat
     environment:
       DATABASE_ENGINE: django.db.backends.mysql
       DATABASE_HOST: ''
       DATABASE_NAME: ddmmikulov
-      DATABASE_PASSWORD: dbpassword
       DATABASE_USER: ddmmikulov
+      DATABASE_PASSWORD: dbpassword
       EMAIL_HOST: smtp
-      EMAIL_HOST_PASSWORD: emailpassword
       EMAIL_HOST_USER: ddmmikulov
+      EMAIL_HOST_PASSWORD: emailpassword
       EMAIL_SUBJECT_PREFIX: '[DDM Mikulov]'
+      LEPRIKON_CHAT_NAME: 'DDM Mikulov'
+      LEPRIKON_CHAT_USERNAME: ddmmikulov
       MEMCACHED_LOCATION: memcached:11211
+      MONGO_URL: mongodb://mongo:27017/rocketchat
+      ROCKETCHAT_API_URL: http://chat:3000/_chat
       SECRET_KEY: secretkey
       SERVER_EMAIL: '"DDM Mikulov" <info@ddmmikulov.cz>'
-      SUPERVISORD_RUN: nginx uwsgi
     ports:
       - 127.0.0.1:10040:80
     volumes:
-      - ./.ipython:/root/.ipython
       - ./data:/app/data
       - ./media:/app/htdocs/media
       - mysql:/var/run/mysqld
@@ -37,12 +40,57 @@ services:
     image: mariadb
     environment:
       MYSQL_DATABASE: ddmmikulov
+      MYSQL_USER: ddmmikulov
       MYSQL_PASSWORD: dbpassword
       MYSQL_ROOT_PASSWORD: rootdbpassword
-      MYSQL_USER: ddmmikulov
     volumes:
       - mysql:/var/run/mysqld
       - ./mysql:/var/lib/mysql
+
+  mongo:
+    image: mongo:4
+    hostname: mongo
+    volumes:
+     - ./mongo:/data/db
+    command: mongod --oplogSize 128 --replSet rs0
+
+  # this container's job is just run the command to initialize the replica set.
+  # it will run the command and remove himself (it will not stay running)
+  mongo-init-replica:
+    image: mongo:4
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          mongo mongo/rocketchat --eval \"
+            rs.initiate({
+              _id: 'rs0',
+              members: [ { _id: 0, host: 'localhost:27017' } ]})\" &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    depends_on:
+      - mongo
+
+  chat:
+    image: rocketchat/rocket.chat:latest
+    command: >
+      bash -c
+        "for i in `seq 1 30`; do
+          node main.js &&
+          s=$$? && break || s=$$?;
+          echo \"Tried $$i times. Waiting 5 secs...\";
+          sleep 5;
+        done; (exit $$s)"
+    volumes:
+      - ./uploads:/app/uploads
+    environment:
+      PORT: 3000
+      MONGO_URL: mongodb://mongo:27017/rocketchat
+      MONGO_OPLOG_URL: mongodb://mongo:27017/local
+      ROOT_URL: https://www.ddmmikulov.cz/_chat
+    depends_on:
+      - mongo
 
   smtp:
     image: catatnight/postfix
@@ -50,9 +98,9 @@ services:
       maildomain: ddmmikulov.cz
       smtp_user: ddmmikulov:emailpassword
     stdin_open: true
-    volumes:
-    - ./dkim:/etc/opendkim/domainkeys
     tty: true
+    volumes:
+      - ./dkim:/etc/opendkim/domainkeys
 
 volumes:
   mysql:

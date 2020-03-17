@@ -1168,3 +1168,8 @@ margin-top: -60px;
 #site-container main.bootstrap h1 {
     display: none;
 }
+
+#chat-modal .box-header {
+    background: #fff;
+    text-align: center;
+}

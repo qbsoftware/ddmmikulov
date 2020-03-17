@@ -12,8 +12,8 @@ from leprikon.site.settings import *
 # Application definition
 INSTALLED_APPS = [
     'ddmmikulov',
-    'cms_articles',
 ] + INSTALLED_APPS + [
+    'cms_articles',
     'aldryn_search',
     'aldryn_bootstrap3',
 ]

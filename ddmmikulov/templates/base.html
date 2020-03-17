@@ -1,4 +1,4 @@
-{% load i18n cache cms_tags menu_tags leprikon_tags sekizai_tags staticfiles ganalytics %}
+{% load i18n cache cms_tags menu_tags leprikon_tags rocketchat sekizai_tags staticfiles ganalytics %}
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -17,7 +17,8 @@
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/font-awesome/css/font-awesome.min.css' %}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap-social.min.css' %}"/>
     {% endif %}
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/css/layout.css' %}?1"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/css/layout.css' %}"/>
+    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/css/chat.css' %}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style.css' %}" />
     {% render_block "css" %}
     <script src="{% static 'js/clearbox.js' %}?dir=http://www.ddmmikulov.cz/js/clearbox&amp;lng=cz&amp;config=default" type="text/javascript"></script>
@@ -56,6 +57,7 @@
                 <div class="related-sites" style="text-align: right; padding-right: 15px;">
                     {% school_year_form %}
                     {% include 'leprikon/user_dropdown.html' %}
+                    {% chat %}
                 </div>
 
                 <div class="clearfix"></div>
@@ -126,5 +128,5 @@
 <script type="text/javascript" src="{% static 'leprikon/lib/bootstrap/js/bootstrap.min.js' %}"></script>
 
 {% render_block "js" %}
-
+{% livechat %}
 </html>
