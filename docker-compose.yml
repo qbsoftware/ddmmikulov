@@ -25,7 +25,7 @@ services:
       MONGO_URL: mongodb://mongo:27017/rocketchat
       ROCKETCHAT_API_URL: http://chat:3000/_chat
       SECRET_KEY: secretkey
-      SERVER_EMAIL: '"DDM Mikulov" <info@ddmmikulov.cz>'
+      SERVER_EMAIL: '"DDM Mikulov" <ddmmikulov@leprikon.cz>'
     ports:
       - 127.0.0.1:10040:80
     volumes:
