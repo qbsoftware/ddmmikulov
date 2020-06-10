@@ -5,10 +5,11 @@ services:
     image: misli/ddmmikulov
     build: .
     depends_on:
-      - memcached
-      - mysql
-      - smtp
       - chat
+      - mongo
+      - mysql
+      - redis
+      - smtp
     environment:
       DATABASE_ENGINE: django.db.backends.mysql
       DATABASE_HOST: ''
@@ -21,10 +22,11 @@ services:
       EMAIL_SUBJECT_PREFIX: '[DDM Mikulov]'
       LEPRIKON_CHAT_NAME: 'DDM Mikulov'
       LEPRIKON_CHAT_USERNAME: ddmmikulov
-      MEMCACHED_LOCATION: memcached:11211
+      CACHE_LOCATION: unix:///var/run/redis/redis.sock
       MONGO_URL: mongodb://mongo:27017/rocketchat
       ROCKETCHAT_API_URL: http://chat:3000/_chat
       SECRET_KEY: secretkey
+      SENTRY_ENVIRONMENT: 'ddmmikulov'
       SERVER_EMAIL: '"DDM Mikulov" <ddmmikulov@leprikon.cz>'
     ports:
       - 127.0.0.1:10040:80
@@ -32,9 +34,14 @@ services:
       - ./data:/app/data
       - ./media:/app/htdocs/media
       - mysql:/var/run/mysqld
+      - redis:/var/run/redis
 
-  memcached:
-    image: memcached
+  redis:
+    image: redis
+    command: bash -c "chmod 0777 /var/run/redis && redis-server --appendonly yes --unixsocket /var/run/redis/redis.sock --unixsocketperm 777"
+    volumes:
+      - ./redis:/data
+      - redis:/var/run/redis
 
   mysql:
     image: mariadb
@@ -104,3 +111,4 @@ services:
 
 volumes:
   mysql:
+  redis:
