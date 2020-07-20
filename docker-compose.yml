@@ -102,7 +102,7 @@ services:
   smtp:
     image: catatnight/postfix
     environment:
-      maildomain: ddmmikulov.cz
+      maildomain: leprikon.cz
       smtp_user: ddmmikulov:emailpassword
     stdin_open: true
     tty: true
