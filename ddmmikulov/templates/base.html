@@ -1,4 +1,4 @@
-{% load i18n cache cms_tags menu_tags leprikon_tags sekizai_tags staticfiles ganalytics %}
+{% load i18n cache cms_tags menu_tags leprikon_tags sekizai_tags static ganalytics %}
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -7,10 +7,6 @@
     <meta name="robots" content="index, follow">
     <meta name="keywords" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek, národopisné soubory, Mikulov, kroužky, děti, dům dětí a mládeže" />
     <meta name="description" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek aj." />
-    <!--[if IE]>
-    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <link href="{% static 'css/ie.css' %}" rel="stylesheet" type="text/css" />
-    <![endif]-->
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap/css/bootstrap.min.css' %}"/>
     {% if backends %}
     <!-- Bootstrap social -->

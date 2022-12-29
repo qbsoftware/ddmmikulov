@@ -10,6 +10,6 @@ fi
 SERVICE=$1
 DATE=$(date '+%Y%m%d-%H%M')
 
-sudo docker-compose stop $SERVICE
+sudo docker compose stop $SERVICE
 sudo tar -czf $SERVICE-$DATE.tar.gz $SERVICE/
-sudo docker-compose start $SERVICE
+sudo docker compose start $SERVICE
