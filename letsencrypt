@@ -1,2 +1,3 @@
 letsencrypt certonly --webroot -w /srv/letsencrypt/htdocs -d ddmmikulov.cz -d www.ddmmikulov.cz
 letsencrypt certonly --webroot -w /srv/letsencrypt/htdocs -d mysql.ddmmikulov.cz
+letsencrypt certonly --webroot -w /srv/letsencrypt/htdocs -d old.ddmmikulov.cz
