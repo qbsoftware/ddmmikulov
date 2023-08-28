@@ -1,5 +1,5 @@
 Whoosh
 aldryn-search
 django-cms-articles
+djangocms-bootstrap5
 leprikon
-git+https://github.com/ChameleonCloud/aldryn-bootstrap3

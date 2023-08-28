@@ -1,0 +1,17 @@
+<div class="row mb-3 checkbox {{ item.css_classes }}">
+    <label for="{{ item.id_for_label }}" class="col-xs-2 col-sm-offset-1{% if item.errors %} alert alert-danger{% endif %}">
+        {{ item }}
+    </label>
+    <div class="col-xs-9 col-sm-8">
+        <label for="{{ item.id_for_label }}">
+            {{ item.label }}
+            {% for error in item.errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+
+            {% if item.help_text %}
+                <span class="help-block">{{ item.help_text | safe }}</span>
+            {% endif %}
+        </label>
+    </div>
+</div>

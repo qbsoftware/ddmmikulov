@@ -19,6 +19,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.urls import include, path
+from django.shortcuts import redirect
+
+def redirect_cz(request, path=""):
+    return redirect(f"/{path}")
 
 try:
     urlpatterns = [
@@ -27,7 +31,9 @@ try:
         path("social/", include("social_django.urls")),
         path("verified-email-field/", include("verified_email_field.urls")),
         path("", include("leprikon.api.urls", namespace="api")),
-        path("cz/", include("cms.urls")),
+        path("cz/", redirect_cz),
+        path("cz/<path:path>/", redirect_cz),
+        path("", include("cms.urls")),
         # this won't work for displaying pages,
         # but allows reverse resolving before leprikon apphook is attached to any page
         path("leprikon/", include("leprikon.urls")),

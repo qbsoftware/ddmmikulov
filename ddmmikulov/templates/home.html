@@ -5,8 +5,5 @@
 {% block meta_description %}{% page_attribute "meta_description" %}{% endblock %}
 
 {% block base_content %}
-<div class="container">
-<h1>{% page_attribute "title" %}</h1>
 {% block content %}{% placeholder "content" %}{% endblock %}
-</div>
 {% endblock %}

@@ -1,0 +1,69 @@
+{% load i18n leprikon_tags sekizai_tags thumbnail %}
+
+<div class="card card-leader">
+    <div class="card-header">
+        <strong>{{ object.full_name }}</strong>
+    </div>
+
+    <div class="card-body">
+        {% if object.photo %}
+        <div class="col-sm-9">
+        {% endif %}
+        {{ object.description | safe }}
+        {% for group in object.get_subjects_by_types %}
+        {% if group.subjects|filter_current_school_year:request.school_year %}
+        <div class="row">
+            <label class="col-sm-3">{{ group.subject_type.plural }}:</label>
+            <div class="col-sm-6">
+                {% for subject in group.subjects|filter_current_school_year:request.school_year %}
+                <a href="{{ subject.get_absolute_url }}">{{ subject.name }}</a><br />
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        {% if object.all_public_contacts %}
+        <div class="row">
+            <label class="col-sm-3">{% trans 'Contact' %}:</label>
+            <div class="col-sm-6">
+                {% for contact in object.all_public_contacts %}
+                <div class="contact contact-{{ contact.contact_type }}">
+                    {{ contact.contact }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if object.page %}
+        <p>
+            {% trans 'More information' %}:
+            <a href="{{ object.page.get_absolute_url }}">
+                {{ object.page.get_title }}
+            </a>
+        </p>
+        {% endif %}
+        {% if object.photo %}
+        </div>
+        <div class="col-sm-3">
+            <a href="{% thumbnail object.photo 1500x1500 %}" data-toggle="lightbox" data-title="{{ object.photo.name }}">
+                <img class="right" alt="{{ object.photo.name }}" src="{% thumbnail object.photo 200x200 %}" />
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% include 'leprikon/static/ekko-lightbox.html' %}
+
+{% addtoblock 'js' %}
+<script>
+<!--
+$(document).delegate('*[data-toggle="lightbox"]', 'click', function(event) {
+    event.preventDefault();
+    $(this).ekkoLightbox();
+});
+-->
+</script>
+{% endaddtoblock %}

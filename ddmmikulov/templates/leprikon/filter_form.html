@@ -1,0 +1,21 @@
+{% load i18n %}
+<form method="get" id="list_filter_form">
+    <div class="row">
+        {% for item in form %}
+        {% if item.name != "leaders" and item.name != "places" %}
+        <div>
+            <label class="control-label" for="{{ item.id_for_label }}">
+                {{ item.label }}
+            </label>
+            <div{% if item.errors %} class="alert alert-danger"{% endif %}>
+                {{ item }}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <div class="d-flex">
+            <button class="btn btn-primary" type="submit">{% trans 'search' %}</button>
+            <a class="btn btn-default" href="{{ request.path }}">{% trans 'cancel search' %}</a>
+        </div>
+    </div>
+</form>

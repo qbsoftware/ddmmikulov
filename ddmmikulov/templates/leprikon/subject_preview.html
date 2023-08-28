@@ -1,0 +1,64 @@
+{% load i18n leprikon_tags sekizai_tags thumbnail %}
+
+<div class="card card-{{ object.subject_type.subject_type }} card-{{ object.subject_type.slug }}">
+    <a href="{{ object.get_absolute_url }}">
+        {% if object.photo %}
+        <img class="card-img-top" alt="{{ object.photo.name }}" src="{% thumbnail object.photo 400x400 crop %}" />
+        {% else %}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"></svg>
+        {% endif %}
+        <div class="card-title">{{ object.display_name }}</div>
+    </a>
+    <div class="card-body">
+        {% if object.price_text %}<small>{{ object.price_text }}</small>{% endif %}
+
+        {% if object.start_date %}{# event #}
+        <p>
+            {% trans 'Start' %}: {{ object.start_date }}{% if objec.start_time %}, {{ objec.start_time }}{% endif %}
+            {% if object.start_date != object.end_date or objec.end_time %}
+                <br/>
+                {% trans 'End' %}:
+                {% if object.start_date != object.end_date %}
+                    {{ object.end_date }}{% if objec.end_time %}, {{ objec.end_time }}{% endif %}
+                {% else %}
+                    {{ objec.end_time }}
+                {% endif %}
+            {% endif %}
+            {% if object.place %}
+                <br/>
+                {% trans 'Place' %}: {{ object.place }}
+            {% endif %}
+        </p>
+        {% elif object.all_times or object.place or object.duration %}{# course or orderable #}
+        <p>
+            {% if object.all_times %}{% trans 'Time' %}: {{ object.all_times | comma_separated }}{% endif %}
+            {% if object.duration %}{% trans 'Duration' %}: {{ object.duration }}{% endif %}
+            {% if object.all_times or object.duration %}{% if object.place %}<br/>{% endif %}{% endif %}
+            {% if object.place %}{% trans 'Place' %}: {{ object.place }}{% endif %}
+        </p>
+        {% endif %}
+
+        {% if object.page %}
+        <p>
+            {% trans 'More information' %}:
+            <a href="{{ object.page.get_absolute_url }}">
+                {{ object.page.get_title }}
+            </a>
+        </p>
+        {% endif %}
+
+        <p>{% registration_links object %}</p>
+
+        {% if request.user.is_staff or request.leader in object.all_leaders %}
+        <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="{% url_with_back 'leprikon:subject_registrations' object.subject_type.slug object.id %}">
+                {% trans 'registrations' %}
+                ({{ object.approved_registrations_count }}{% if object.unapproved_registrations_count %} + {{ object.unapproved_registrations_count }}{% endif %})
+            </a>
+            <a class="btn btn-sm btn-default" href="{% url 'leprikon:subject_journals' object.subject_type.slug object.id %}">
+                {% trans 'journals' %}
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>

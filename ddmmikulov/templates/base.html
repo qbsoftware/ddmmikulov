@@ -7,119 +7,72 @@
     <meta name="robots" content="index, follow">
     <meta name="keywords" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek, národopisné soubory, Mikulov, kroužky, děti, dům dětí a mládeže" />
     <meta name="description" content="DDM Mikulov nabízí zábavu pro volný čas, ubytování v Mikulově, zájmové, taneční, umělecké, hudební a sportovní kroužky, akce pro děti, dětské tábory, klub maminek aj." />
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap/css/bootstrap.min.css' %}"/>
-    {% if backends %}
-    <!-- Bootstrap social -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    {% if backends %}<!-- Bootstrap social -->
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/font-awesome/css/font-awesome.min.css' %}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/lib/bootstrap-social.min.css' %}"/>
     {% endif %}
-    <link rel="stylesheet" type="text/css" media="all" href="{% static 'leprikon/css/layout.css' %}"/>
     <link rel="stylesheet" type="text/css" media="all" href="{% static 'css/style.css' %}" />
     {% render_block "css" %}
-    <script src="{% static 'js/clearbox.js' %}?dir=http://www.ddmmikulov.cz/js/clearbox&amp;lng=cz&amp;config=default" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
     <link rel="apple-touch-icon" sizes="57x57" href="{% static 'apple-touch-icon-57x57.png' %}">
     <link rel="apple-touch-icon" sizes="60x60" href="{% static 'apple-touch-icon-60x60.png' %}">
     <link rel="icon" type="image/png" href="{% static 'favicon-16x16.png' %}" sizes="16x16">
     <link rel="icon" type="image/png" href="{% static 'favicon-32x32.png' %}" sizes="32x32">
     <meta name="msapplication-TileColor" content="#da532c">
-
-    <script src="{% static 'leprikon/lib/jquery.min.js' %}"></script>
 </head>
 
-<body class="subpage-info">
+<body>
     {% cms_toolbar %}
-    <div id="site-container">
-        <div class="web-container">
-            <header class="page-header clearfix">
-                <h1>
-                    <a href="http://www.ddmmikulov.cz/cz/" class="logo" title="DDM Mikulov">
+    <header>
+        <div class="header-brand">
+            <a href="https://www.ddmmikulov.cz/" class="logo" title="DDM Mikulov">
+                <img src="{% static 'img/logo.png' %}" alt="DDM Mikulov"/>
+            </a>
+        </div>
+        <nav class="header-nav">
+            {% show_menu 0 100 0 100 'menu.html' 'CMSMenu,LeprikonMenu' %}
+        </nav>
+        <div class="header-authentication">
+            {% school_year_form %}
+            <div class="dropdown dropdown-authentication">
+                <button class="btn btn-sm dropdown-toggle m-1" type="button" id="user_menu" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.is_authenticated %}{{ request.user.get_full_name | default:request.user.get_username }}
+                    {% else %}{% trans 'Anonymous user' %}{% endif %}
+                </button>
+                <ul class="dropdown-menu">
+                    {% show_menu 0 100 100 100 'leprikon/user_menu.html' 'UserMenu' %}
+                </ul>
+            </span>
+        </div>
+    </header>
+    <main>
+        {% block base_content %}{% endblock %}
+        {% if request.path == '/' %}{% include "follow-cursor.html" %}{% endif %}
+    </main>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="footer-logo col-sm-3">
+                    <a href="https://www.ddmmikulov.cz/" class="logo" title="DDM Mikulov">
                         <img src="{% static 'img/logo.png' %}" alt="DDM Mikulov">
                     </a>
-                </h1>
-
-                <div class="related-sites">
-                    <span class="mail"><a href="mailto:info@ddmmikulov.cz">info@ddmmikulov.cz</a></span>
-                    <span class="telefon">723 441 495, 702 222 890</span>
-
-                    <div class="search">
-                        <form action="http://www.ddmmikulov.cz/cz/hledat/" method="post">
-                        <input type="text" name="search" placeholder="Hledat…" />
-                        <input type="submit" value="" />
-                        </form>
-                    </div>
                 </div>
 
-                <div class="related-sites" style="text-align: right; padding-right: 15px;">
-                    {% school_year_form %}
-                    {% include 'leprikon/user_dropdown.html' %}
+                <div class="footer-contact col-sm-7">
+                    {% static_placeholder "Kontakt" %}
                 </div>
 
-                <div class="clearfix"></div>
-
-                <nav class="navigation">
-                    <ul>
-                        <li class='menu36'><a href="http://www.ddmmikulov.cz/cz/" title='Domů' >Domů</a></li>
-                        <li class='menu9'><a href="/cz/akce/" title="Akce">Akce</a></li>
-                        <li class='menu24'>
-                            <a href="javascript:" title="Kroužky">Kroužky</a>
-                            <ul>
-                                {% show_menu_below_id "krouzky" 0 100 0 1 %}
-                            </ul>
-                        </li>
-                        {% cache 300 menu65 %}
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu65 ")]' '/http:/https:/' %}
-                        {% endcache %}
-                        <li class='menu8'>
-                            <a href="javascript:" title="Tábory">Tábory</a>
-                            <ul>
-                                {% show_menu_below_id "tabory" 0 100 0 1 %}
-                            </ul>
-                        </li>
-                        {% cache 300 menu64-1 %}
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu64 ")]' '/http:/https:/' %}
-                        {% upstream 'https://www.ddmmikulov.cz/cz/' '//nav//li[contains(concat(@class, " "), "menu1 ")]' '/http:/https:/' %}
-                        {% endcache %}
-                        <li class='menu167'>
-                            <a href="javascript:" title='Přihlašování' >Přihlašování</a>
-                            <ul>
-                                {% show_menu_below_id "leprikon" 0 100 0 1 %}
-                            </ul>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
-            {% block base_content %}{% endblock %}
-            <div class="clearfix"></div>
-        </div>
-        <footer class="page-footer">
-            <div class="web-container">
-                <div class="logo-footer">
-                    <a href="http://www.ddmmikulov.cz/cz/" class="logo" title="DDM Mikulov">
-                        <img src="{% static 'img/logo_footer.png' %}" alt="DDM Mikulov">
+                <div class="footer-leprikon col-sm-2">
+                    <a href="https://leprikon.cz/" target="_blank" title="Informační systém Leprikón">
+                        <img src="{% static 'leprikon/logo.png' %}" alt="Informační systém Leprikón"/>
                     </a>
                 </div>
-
-                <div class="contact">
-                    <p>
-                        Dům dětí a mládeže Mikulov<br />
-                        Mikulov, Svobody 241/6<br />
-                        mail: <a href="mailto:info@ddmmikulov.cz">info@ddmmikulov.cz</a><br />
-                        telefon: 723 441 495, 702 222 890
-                    </p>
-                </div>
-
-                <div class="fb-footer">
-                    <p>
-                    <a class="dom" href="http://www.ddmmikulov.cz/cz/">www.ddmmikulov.cz</a>
-                    <a href="https://www.facebook.com/pages/DDM-Mikulov/645359742241123"><img src="{% static 'img/fb.png' %}" alt="Facebook" /></a>
-                    </p>
-                </div>
-                <div class="clearfix"></div>
             </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
 </body>
-<script type="text/javascript" src="{% static 'leprikon/lib/bootstrap/js/bootstrap.min.js' %}"></script>
 
 {% render_block "js" %}
 </html>

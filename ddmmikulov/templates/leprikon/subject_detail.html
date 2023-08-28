@@ -1,0 +1,101 @@
+{% load i18n leprikon_tags sekizai_tags thumbnail %}
+
+<div class="detail detail-{{ object.subject_type.subject_type }} detail-{{ object.subject_type.slug }}">
+    <div class="detail-content">
+        {% for group in object.all_groups %}
+        <small class="tag" style="color: {{ group.font_color }}; border-color: {{ group.font_color }}; background-color: {{ group.color }}">
+            {{ group.name }}
+        </small>
+        {% endfor %}
+        {% if object.price_text %}<small>{{ object.price_text }}</small>{% endif %}
+
+        {% if object.start_date %}{# event #}
+        <p>
+            {% trans 'Start' %}: {{ object.start_date }}{% if objec.start_time %}, {{ objec.start_time }}{% endif %}
+            {% if object.start_date != object.end_date or objec.end_time %}
+                <br/>
+                {% trans 'End' %}:
+                {% if object.start_date != object.end_date %}
+                    {{ object.end_date }}{% if objec.end_time %}, {{ objec.end_time }}{% endif %}
+                {% else %}
+                    {{ objec.end_time }}
+                {% endif %}
+            {% endif %}
+            {% if object.place %}
+                <br/>
+                {% trans 'Place' %}: {{ object.place }}
+            {% endif %}
+        </p>
+        {% elif object.all_times or object.place or object.duration %}{# course or orderable #}
+        <p>
+            {% if object.all_times %}{% trans 'Time' %}: {{ object.all_times | comma_separated }}{% endif %}
+            {% if object.duration %}{% trans 'Duration' %}: {{ object.duration }}{% endif %}
+            {% if object.all_times or object.duration %}{% if object.place %}<br/>{% endif %}{% endif %}
+            {% if object.place %}{% trans 'Place' %}: {{ object.place }}{% endif %}
+        </p>
+        {% endif %}
+
+        {{ object.description | safe }}
+
+        {% if object.all_age_groups %}
+        <p>
+            {% if object.all_age_groups|length > 1 %}{% trans 'Age groups' %}{% else %}{% trans 'Age group' %}{% endif %}:
+            {{ object.all_age_groups|comma_separated }}
+        </p>
+        {% endif %}
+
+        {% if object.all_target_groups %}
+        <p>
+            {% if object.all_target_groups|length > 1 %}{% trans 'Target groups' %}{% else %}{% trans 'Target group' %}{% endif %}:
+            {{ object.all_target_groups|comma_separated }}
+        </p>
+        {% endif %}
+
+        {% if object.all_leaders %}
+        <p>
+            {% blocktrans count counter=object.all_leaders|length %}Led by{% plural %}Led by{% endblocktrans %}
+            {{ object.get_leaders_list }}
+        </p>
+        {% endif %}
+
+        {% if object.public_attachments %}
+        <p>
+            {% trans 'Attachments' %}:
+            {% for attachment in object.public_attachments %}
+            <br/><a href="{{ attachment.file.url }}">{{ attachment.file }}</a>
+            {% endfor %}
+        </p>
+        {% endif %}
+
+        {% if object.page %}
+        <p>
+            {% trans 'More information' %}:
+            <a href="{{ object.page.get_absolute_url }}">
+                {{ object.page.get_title }}
+            </a>
+        </p>
+        {% endif %}
+
+        <p>{% registration_links object %}</p>
+
+        {% if request.user.is_staff or request.leader in object.all_leaders %}
+        <div class="btn-group">
+            <a class="btn btn-sm btn-default" href="{% url_with_back 'leprikon:subject_registrations' object.subject_type.slug object.id %}">
+                {% trans 'registrations' %}
+                ({{ object.approved_registrations_count }}{% if object.unapproved_registrations_count %} + {{ object.unapproved_registrations_count }}{% endif %})
+            </a>
+            <a class="btn btn-sm btn-default" href="{% url 'leprikon:subject_journals' object.subject_type.slug object.id %}">
+                {% trans 'journals' %}
+            </a>
+            <a class="btn btn-sm btn-default" href="{% url_with_back 'leprikon:subject_update' object.subject_type.slug object.id %}">
+                upravit popis
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    {% if object.photo %}
+    <div class="detail-image">
+        <img class="card" alt="{{ object.photo.name }}" src="{% thumbnail object.photo 600x600 %}" />
+    </div>
+    {% endif %}
+</div>

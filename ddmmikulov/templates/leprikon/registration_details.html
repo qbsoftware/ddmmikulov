@@ -1,0 +1,158 @@
+{% load i18n leprikon_tags %}
+<div class="card card-registration">
+    <div class="card-header">
+        <strong>{% trans 'registration number' %}: {{ reg.variable_symbol }}</strong>
+    </div>
+
+    <div class="card-body">
+        {% if reg.start_date %}
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Event date' %}:</label>
+            <div class="col-sm-8">
+                {{ reg.event_date }}
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Status' %}:</label>
+            <div class="col-sm-8">
+                {% if reg.canceled %}
+                    {% blocktrans with d=reg.canceled %}registration canceled on {{ d }}{% endblocktrans %}
+                {% elif reg.cancelation_requested %}
+                    {% blocktrans with d=reg.cancelation_requested %}cancellation requested on {{ d }}{% endblocktrans %}
+                {% elif reg.approved %}
+                    {% blocktrans with d=reg.approved %}registration approved on {{ d }}{% endblocktrans %}
+                {% else %}
+                    {% trans 'awaiting approval' %}
+                {% endif %}
+            </div>
+        </div>
+        {% for participant in reg.all_participants %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Participant' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.full_name }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Birth date' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.birth_date }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Age group' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.age_group }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Address' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.address }}
+                </div>
+            </div>
+            {% if participant.contact %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Contact' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.contact }}
+                </div>
+            </div>
+            {% endif %}
+            {% if participant.age_group.require_school %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'School' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.school_and_class }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Health' %}:</label>
+                <div class="col-sm-8">
+                    {{ participant.health | linebreaks }}
+                </div>
+            </div>
+            {% for parent in participant.parents %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Parent' %}:</label>
+                <div class="col-sm-8">
+                    {{ parent.full_name }}, {{ parent.address }}<br />
+                    {{ parent.contact }}
+                </div>
+            </div>
+            {% endfor %}
+            {% for qa in participant.get_questions_and_answers %}
+            <div class="row">
+                <label class="col-sm-4">{{ qa.question }}:</label>
+                <div class="col-sm-8">{{ qa.answer }}</div>
+            </div>
+            {% endfor %}
+            {% include 'leprikon/registration_participant_presence.html' %}
+        {% endfor %}
+
+        {% if reg.all_group_members %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Group name' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.name }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Target group' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.target_group }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Contact person' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.full_name }}
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Address' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.address }}
+                </div>
+            </div>
+            {% if reg.group.contact %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Contact' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.contact }}
+                </div>
+            </div>
+            {% endif %}
+            {% if reg.group.target_group.require_school %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'School' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group.school_and_class }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="row">
+                <label class="col-sm-4">{% trans 'Group members' %}:</label>
+                <div class="col-sm-8">
+                    {{ reg.group_members_list_html }}
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Legal agreements' %}:</label>
+            <div class="col-sm-8">
+                {% for agreement in reg.all_agreements %}
+                    <strong>{{ agreement.name }}:</strong><br/>
+                    {% for option in agreement.all_options %}
+                        {% if option.required or option in reg.all_agreement_options %}☑{% else %}☐{% endif %}
+                        {{ option.name }}<br/>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        {% include 'leprikon/registration_payments.html' %}
+    </div>
+</div>

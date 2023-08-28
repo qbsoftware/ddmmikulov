@@ -15,13 +15,29 @@ INSTALLED_APPS = [
 ] + INSTALLED_APPS + [
     'cms_articles',
     'aldryn_search',
-    'aldryn_bootstrap3',
+    'djangocms_icon',
+    'djangocms_bootstrap5',
+    'djangocms_bootstrap5.contrib.bootstrap5_alerts',
+    'djangocms_bootstrap5.contrib.bootstrap5_badge',
+    'djangocms_bootstrap5.contrib.bootstrap5_card',
+    'djangocms_bootstrap5.contrib.bootstrap5_carousel',
+    'djangocms_bootstrap5.contrib.bootstrap5_collapse',
+    'djangocms_bootstrap5.contrib.bootstrap5_content',
+    'djangocms_bootstrap5.contrib.bootstrap5_grid',
+    'djangocms_bootstrap5.contrib.bootstrap5_jumbotron',
+    'djangocms_bootstrap5.contrib.bootstrap5_link',
+    'djangocms_bootstrap5.contrib.bootstrap5_listgroup',
+    'djangocms_bootstrap5.contrib.bootstrap5_media',
+    'djangocms_bootstrap5.contrib.bootstrap5_picture',
+    'djangocms_bootstrap5.contrib.bootstrap5_tabs',
+    'djangocms_bootstrap5.contrib.bootstrap5_utilities',
 ]
 
 ROOT_URLCONF = 'ddmmikulov.urls'
 
 CMS_TEMPLATES = [
     ('default.html', 'Výchozí'),
+    ('home.html', 'Homepage'),
 ]
 
 # templates used to render plugin article
@@ -39,6 +55,14 @@ CMS_PLACEHOLDER_CONF = {
         'name': 'Obsah',
     },
 }
+
+DJANGOCMS_BOOTSTRAP5_GRID_CONTAINERS = (
+    ('container', _('Container')),
+    ('container-fluid', _('Fluid container')),
+    ('container-salmon', "Lososový container"),
+    ('container-yellow', "Žlutý container"),
+    ('container-purple', "Fialový container"),
+)
 
 THUMBNAIL_ALIASES = {
     '': {

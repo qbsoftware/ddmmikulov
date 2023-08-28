@@ -1,0 +1,26 @@
+{% extends 'leprikon/default.html' %}
+{% load i18n sekizai_tags %}
+
+{% block content %}
+
+<a class="btn btn-sm btn-default" href="{{ back_url }}">{{ back_label }}</a>
+
+<h1>{% block title %}{{ messagerecipient.message.subject }}{% endblock %}</h1>
+
+<div class="message-details">
+    {% trans 'Sent' %}: {{ messagerecipient.sent }}<br />
+    {% trans 'Viewed' %}: {{ messagerecipient.viewed }}
+</div>
+
+<div class="message-text">
+{{ messagerecipient.message.text | safe }}
+</div>
+
+{% if messagerecipient.message.all_attachments %}
+<h2>{% trans 'Attachments' %}</h2>
+{% for attachment in messagerecipient.message.all_attachments %}
+<a href="{{ attachment.file.url }}">{{ attachment.file }}</a><br/>
+{% endfor %}
+{% endif %}
+
+{% endblock %}

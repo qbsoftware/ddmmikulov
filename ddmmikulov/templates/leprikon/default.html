@@ -1,4 +1,9 @@
-{% extends 'submenu.html' %}
-{% load leprikon_tags %}
+{% extends 'base.html' %}
+{% load cms_tags leprikon_tags %}
 
-{% block h2 %}{% block title %}{{ title|first_upper }}{% endblock %}{% endblock %}
+{% block h1 %}{% block title %}{{ title|first_upper }}{% endblock %}{% endblock %}
+{% block base_content %}
+<div class="container">
+{% block content %}{% placeholder "content" %}{% endblock %}
+</div>
+{% endblock %}

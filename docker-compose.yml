@@ -7,6 +7,7 @@ x-leprikon: &leprikon
     - redis
     - smtprelay
   environment:
+    CMSPLUGIN_FILER_MIGRATED: yes
     DATABASE_ENGINE: django.db.backends.mysql
     DATABASE_HOST: ''
     DATABASE_NAME: ddmmikulov

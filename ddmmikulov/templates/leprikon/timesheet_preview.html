@@ -1,0 +1,25 @@
+{% load i18n leprikon_tags static %}
+<div class="card card-timesheet {% if not object.submitted %}not-{% endif %}submitted">
+
+    <div class="card-header">
+        <a href="{% url 'leprikon:timesheet_detail' object.id %}?page={{ page_obj.number }}"><strong>{{ object.period.name }}</strong></a>
+        {% if not object.submitted %}
+        <a class="btn btn-primary btn-sm" href="{% url_with_back 'leprikon:timesheet_submit' object.id %}">
+            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            {% trans 'submit' %}
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="card-body">
+        {% for group in object.groups %}
+        <div class="row">
+            <label class="col-sm-4">{{ group.name }}</label>
+            <div class="col-sm-8">
+                {{ group.duration }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>

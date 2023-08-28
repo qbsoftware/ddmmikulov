@@ -1,0 +1,49 @@
+{% extends 'leprikon/default.html' %}
+{% load cms_tags i18n leprikon_tags %}
+
+{% block base_content %}
+
+{% if form %}
+<div class="container-list-form">
+<div class="list-form list-form-{{ view.subject_type.subject_type }} list-form-{{ view.subject_type.slug }}">
+    {% include 'leprikon/filter_form.html' %}
+</div>
+{% endif %}
+
+<div class="{% if form %}list-list{% else %}container{% endif %}">
+
+<h1>{% block title %}{{ title|first_upper }}{% endblock %}</h1>
+
+{% if placeholder %}
+{% static_placeholder placeholder %}
+{% endif %}
+
+{% if add_url %}
+<a class="btn btn-sm btn-primary right" href="{{ add_url }}" title="{{ add_title }}">
+    <span class="glyphicon glyphicon-plus"></span>
+    {{ add_label }}
+</a>
+{% endif %}
+
+{% include 'leprikon/pagination.html' %}
+
+{% block list %}
+<div class="d-grid gap-3 cards-list">
+{% for object in object_list %}
+{% include preview_template %}
+{% empty %}
+<p style="grid-column-end: span 3;">{{ message_empty }}</p>
+{% endfor %}
+</div>
+{% endblock %}
+
+{% include 'leprikon/pagination.html' %}
+
+</div>
+
+{% if form %}
+<div><!-- GAP right --></div>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{% load leprikon_tags sekizai_tags static %}
+<form action="{% url 'leprikon:school_year' %}" method="post" class="form-horizontal" id="id_school_year_form">
+    {% csrf_token %}
+    <input type="hidden" name="{% param_back %}" value="{% current_url %}"/>
+    <div class="dropdown dropdown-school-year">
+        <button class="btn btn-sm dropdown-toggle m-1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% for value, label in school_year_form.school_year.field.choices %}
+            {% if value == school_year_form.school_year.value %}{{ label }}{% endif %}
+            {% endfor %}
+        </button>
+        <ul class="dropdown-menu">
+            {% for value, label in school_year_form.school_year.field.choices %}
+            <li>
+                <button class="dropdown-item" type="submit"
+                    name="{{ school_year_form.school_year.name }}" value="{{ value }}"
+                    {% if value == school_year_form.school_year.value %}disabled{% endif %}>{{ label }}</button>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</form>

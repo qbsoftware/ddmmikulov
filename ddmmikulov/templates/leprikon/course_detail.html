@@ -1,0 +1,10 @@
+{% extends 'leprikon/default.html' %}
+{% load i18n leprikon_tags sekizai_tags %}
+
+{% block content %}
+
+<h1>{% block title %}{{ course.name }}{% endblock %}</h1>
+
+{% include 'leprikon/subject_detail.html' %}
+
+{% endblock %}

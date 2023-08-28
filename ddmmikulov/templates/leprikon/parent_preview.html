@@ -1,0 +1,26 @@
+{% load i18n leprikon_tags %}
+<div class="card card-parent">
+
+    <div class="card-header">
+        <strong>{{ object.full_name }}</strong>
+        <a class="btn btn-primary btn-sm" href="{% url_with_back 'leprikon:parent_update' object.id %}">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            {% trans 'edit' %}
+        </a>
+        <a class="btn btn-primary btn-sm" href="{% url_with_back 'leprikon:parent_delete' object.id %}">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            {% trans 'delete' %}
+        </a>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <label class="col-sm-4">Kontakt:</label>
+            <div class="col-sm-8">
+                {{ object.address }}<br/>
+                email: {{ object.email }} telefon: {{ object.phone }}
+            </div>
+        </div>
+    </div>
+
+</div>

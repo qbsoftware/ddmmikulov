@@ -1,0 +1,65 @@
+{% extends 'leprikon/default.html' %}
+{% load i18n cms_tags sekizai_tags static %}
+
+{% block content %}
+
+<h1>{% block title %}{% trans 'Reports' %}{% endblock %}</h1>
+
+{% static_placeholder 'reports' %}
+
+{% for report in reports %}
+
+<h2 class="clickable" data-bs-toggle="collapse" id="report-title-{{ forloop.counter }}" data-bs-target="#report-form-{{ forloop.counter }}">
+    {{ report.title }}
+</h2>
+
+<div class="collapse" id="report-form-{{ forloop.counter }}">
+    {{ report.instructions | safe }}
+
+    <form action="{{ report.url }}" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% for ro in report.form.readonly_fields %}
+        <div class="form-group">
+            <label class="control-label col-md-3">{{ ro.label }}:</label>
+            <div class="col-md-9">
+                <div class="form-control">{{ ro.value }}</div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for item in report.form %}
+            {% include 'leprikon/form_item.html' %}
+        {% endfor %}
+
+        <!-- SUBMIT -->
+        <div class="form-group">
+            <div class="col-md-9 col-md-offset-3">
+                <button class="btn btn-primary" type="submit">{% trans 'Show' %}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endfor %}
+
+{% include 'leprikon/static/bootstrap-datetimepicker.html' %}
+{% include 'leprikon/static/bootstrap-multiselect.html' %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+$(document).ready(function() {
+    $('select[data-type=ModelMultipleChoiceField]').multiselect({
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        selectAllText: '{% trans 'select all' %}',
+        nonSelectedText: '',
+        allSelectedText: '{% trans 'all' %}',
+        numberDisplayed: 2,
+        nSelectedText: '{% trans 'selected' %}',
+        disableIfEmpty: true,
+    });
+});
+</script>
+{% endaddtoblock %}
+
+{% endblock %}

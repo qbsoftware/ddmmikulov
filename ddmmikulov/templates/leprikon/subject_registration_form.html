@@ -1,0 +1,531 @@
+{% extends 'leprikon/default.html' %}
+{% load i18n cms_tags leprikon_tags sekizai_tags %}
+
+{% block content %}
+
+<h1>{% block title %}{{ title }}{% endblock %}</h1>
+
+{% if view.subject_variant %}
+
+{% if form.errors %}
+    <div class="alert alert-danger" role="alert">{% trans 'Please correct the highlighted errors below.' %}</div>
+    <!-- {{ form.errors }} -->
+{% endif %}
+{% for error in form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endfor %}
+
+<form action="" method="post" class="form-horizontal">{% csrf_token %}
+
+    {% if form.instance.subject.orderable %}
+        <h3>{% trans 'Event date' %}</h3>
+        {% include 'leprikon/form_item.html' with item=form.start_date %}
+        {% include 'leprikon/form_item.html' with item=form.start_time %}
+    {% endif %}
+
+    {% if form.instance.subject_variant.allow_period_selection %}
+    {% include 'leprikon/form_item.html' with item=form.periods %}
+    {% endif %}
+
+    {{ form.participants_formset.management_form }}
+
+    {% for participant_form in form.participants_formset %}
+        <h3>{% trans 'Participant' %}</h3>
+        {% if participant_form.user_participants %}
+        {% include 'leprikon/form_item.html' with item=participant_form.participant_select_form.participant %}
+        {% else %}
+        <input type="hidden" name="{{ participant_form.prefix }}-participant_select-participant" value="new"/>
+        {% endif %}
+
+        {% include 'leprikon/form_item.html' with item=participant_form.first_name %}
+        {% include 'leprikon/form_item.html' with item=participant_form.last_name %}
+        {% include 'leprikon/form_item.html' with item=participant_form.citizenship %}
+        <div id="{{ participant_form.prefix }}-birth_num" class="hidden">
+        {% include 'leprikon/form_item.html' with item=participant_form.birth_num %}
+        </div>
+        <div id="{{ participant_form.prefix }}-birth_date" class="hidden">
+        {% include 'leprikon/form_item.html' with item=participant_form.birth_date %}
+        {% include 'leprikon/form_item.html' with item=participant_form.gender %}
+        </div>
+        {% include 'leprikon/form_item.html' with item=participant_form.age_group %}
+        {% include 'leprikon/form_item.html' with item=participant_form.street %}
+        {% include 'leprikon/form_item.html' with item=participant_form.city %}
+        {% include 'leprikon/form_item.html' with item=participant_form.postal_code %}
+        <div id="{{ participant_form.prefix }}-contact" class="hidden">
+            {% include 'leprikon/form_item.html' with item=participant_form.phone %}
+            {% include 'leprikon/form_item.html' with item=participant_form.email %}
+        </div>
+        <div id="{{ participant_form.prefix }}-school_details" class="hidden">
+            {% include 'leprikon/form_item.html' with item=participant_form.school %}
+            <div id="{{ participant_form.prefix }}-school_other" class="hidden">
+                {% include 'leprikon/form_item.html' with item=participant_form.school_other %}
+            </div>
+            {% include 'leprikon/form_item.html' with item=participant_form.school_class %}
+        </div>
+        {% include 'leprikon/form_item.html' with item=participant_form.health %}
+
+        {% for item in participant_form.questions_form %}
+            {% include 'leprikon/form_item.html' %}
+        {% endfor %}
+
+        <div id="{{ participant_form.prefix }}-parents"{% if participant_form.hide_parents %} class="hidden"{% endif %}>
+            <h3>{% trans 'Parents' %}</h3>
+
+            <div id="{{ participant_form.prefix }}-parent1_switch">
+                {% include 'leprikon/form_item.html' with item=participant_form.has_parent1 %}
+            </div>
+            <div id="{{ participant_form.prefix }}-parent1_form"{% if not participant_form.has_parent1.value %} class="hidden"{% endif %}>
+                {% if participant_form.user_parents %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_select_form.parent %}
+                {% else %}
+                <input type="hidden" name="{{ participant_form.prefix }}-parent1_select-parent" value="new"/>
+                {% endif %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_first_name %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_last_name %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_street %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_city %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_postal_code %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_phone %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent1_email %}
+            </div>
+
+            {% include 'leprikon/form_item.html' with item=participant_form.has_parent2 %}
+            <div id="{{ participant_form.prefix }}-parent2_form"{% if not participant_form.has_parent2.value %} class="hidden"{% endif %}>
+                {% if participant_form.user_parents %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_select_form.parent %}
+                {% else %}
+                <input type="hidden" name="{{ participant_form.prefix }}-parent2_select-parent" value="new"/>
+                {% endif %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_first_name %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_last_name %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_street %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_city %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_postal_code %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_phone %}
+                {% include 'leprikon/form_item.html' with item=participant_form.parent2_email %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ form.group_formset.management_form }}
+    {{ form.group_members_formset.management_form }}
+
+    {% for group_form in form.group_formset %}
+        <h3>{% trans 'Group' %}</h3>
+        {% include 'leprikon/form_item.html' with item=group_form.target_group %}
+        <div id="{{ group_form.prefix }}-school_details" class="hidden">
+            {% include 'leprikon/form_item.html' with item=group_form.school %}
+            <div id="{{ group_form.prefix }}-school_other" class="hidden">
+                {% include 'leprikon/form_item.html' with item=group_form.school_other %}
+            </div>
+            {% include 'leprikon/form_item.html' with item=group_form.school_class %}
+        </div>
+        {% include 'leprikon/form_item.html' with item=group_form.name %}
+        {% include 'leprikon/form_item.html' with item=group_form.street %}
+        {% include 'leprikon/form_item.html' with item=group_form.city %}
+        {% include 'leprikon/form_item.html' with item=group_form.postal_code %}
+        <h3>{% trans 'Contact person' %}</h3>
+        {% include 'leprikon/form_item.html' with item=group_form.first_name %}
+        {% include 'leprikon/form_item.html' with item=group_form.last_name %}
+        {% include 'leprikon/form_item.html' with item=group_form.phone %}
+        {% include 'leprikon/form_item.html' with item=group_form.email %}
+
+        {% for item in group_form.questions_form %}
+            {% include 'leprikon/form_item.html' %}
+        {% endfor %}
+    {% endfor %}
+
+    {% for group_member_form in form.group_members_formset %}
+        {% if forloop.first %}
+        <h3>{% trans 'Participants list' %}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>{{ group_member_form.first_name.label }}</th>
+                    <th>{{ group_member_form.last_name.label }}</th>
+                    <th>{{ group_member_form.note.label }}</th>
+                </tr>
+            </thead>
+            <tbody>
+        {% endif %}
+                <tr>
+                    {% include 'leprikon/form_inline_item.html' with item=group_member_form.first_name %}
+                    {% include 'leprikon/form_inline_item.html' with item=group_member_form.last_name %}
+                    {% include 'leprikon/form_inline_item.html' with item=group_member_form.note %}
+                </tr>
+        {% if forloop.last %}
+            </tbody>
+        </table>
+        {% endif %}
+    {% endfor %}
+
+    <h3>{% trans 'Billing information' %}</h3>
+
+    <div id="billing_info_select">
+        {% include 'leprikon/form_item.html' with item=form.billing_info_select_form.billing_info %}
+    </div>
+    <div id="billing_info_form"{% if form.billing_info_select_form.billing_info.value == 'none' %} class="hidden"{% endif %}>
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.name %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.street %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.city %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.postal_code %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.company_num %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.vat_number %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.contact_person %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.phone %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.email %}
+        {% include 'leprikon/form_item.html' with item=form.billing_info_form.employee %}
+    </div>
+
+    <h3>{% trans 'Note' %}</h3>
+
+    {% include 'leprikon/form_item.html' with item=form.note %}
+
+    {% for agreement_form in form.agreement_forms %}
+        {% if agreement_form.agreement.heading %}
+            <h3>{{ agreement_form.agreement.heading }}</h3>
+        {% endif %}
+
+        {{ agreement_form.agreement.agreement|safe }}
+
+        {% for item in agreement_form %}
+            {% include 'leprikon/form_item_checkbox.html' %}
+        {% endfor %}
+    {% endfor %}
+
+    <!-- SUBMIT -->
+    <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <button class="btn btn-primary" type="submit">{{ submit_label }}</button>
+            {% if back_url %}
+            <a class="btn btn-default" href="{{ back_url }}">{{ back_label }}</a>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+{% addtoblock 'css' %}
+{{ form.media.css }}
+{% endaddtoblock %}
+
+{% addtoblock "js" %}
+{{ form.media.js }}
+
+<script type="text/javascript">
+
+function getBirthDate(birthNum) {
+    birthNum = birthNum.replace("/","");
+    y = parseInt(birthNum.substr(0, 2));
+    year = (birthNum.length == 10 ? 1900 : 1800) + (y < 54 ? 100 : 0) + y;
+    month = parseInt(birthNum.substr(2, 2)) % 50 % 20;
+    day = parseInt(birthNum.substr(4, 2));
+    return new Date(year, month-1, day);
+}
+
+function getAge(birthDate) {
+    today = new Date();
+    birthDay = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate())
+    return today.getFullYear() - birthDate.getFullYear() - (birthDay > today ? 1 : 0)
+}
+
+function addError(objId, errorMessage) {
+    $(objId).parent().addClass('alert-danger');
+    $(objId).parent().find('div').remove()
+    $(`<div>${errorMessage}</div>`).insertAfter(objId);
+}
+
+function removeError(objId) {
+    $(objId).parent().removeClass('alert-danger');
+    $(objId).parent().find('div').remove()
+}
+
+function checkBirthDateAgeGroup(birthDateId, ageGroupId) {
+    ok = true;
+    dp = $(birthDateId).data('DateTimePicker');
+    if (dp && dp.date()) {
+        age = getAge(dp.date()._d);
+        ageGroup = age_groups[$('#id_participants-0-age_group').val()];
+        if (age && ageGroup) {
+            if (ageGroup.min_age && age < ageGroup.min_age) {
+                addError(
+                    ageGroupId,
+                    `{% trans "Minimal age for this age group is ${ageGroup.min_age}." %}`,
+                );
+                ok = false;
+            }
+            if (ageGroup.max_age && age > ageGroup.max_age) {
+                addError(
+                    ageGroupId,
+                    `{% trans "Maximal age for this age group is ${ageGroup.max_age}." %}`,
+                );
+                ok = false;
+            }
+        }
+    }
+    if (ok) removeError(ageGroupId);
+}
+
+{% for participant_form in form.participants_formset %}{% if forloop.first %}
+var citizenship_requires_birth_num = {{% for citizenship in participant_form.all_citizenships %}
+    {{ citizenship.id }}: {% if citizenship.require_birth_num %}true{% else %}false{% endif %},{% endfor %}
+};
+{% endif %}{% endfor %}
+
+var age_groups = {{% for age_group in form.instance.subject.all_age_groups %}
+    {{ age_group.id }}: {
+        'require_school': {% if age_group.require_school %}true{% else %}false{% endif %},
+        'min_age': {% if age_group.min_age is None %}null{% else %}{{ age_group.min_age }}{% endif %},
+        'max_age': {% if age_group.max_age is None %}null{% else %}{{ age_group.max_age }}{% endif %},
+    },{% endfor %}
+};
+
+var target_groups = {{% for target_group in form.instance.subject.all_target_groups %}
+    {{ target_group.id }}: {
+        'require_school': {% if target_group.require_school %}true{% else %}false{% endif %},
+    },{% endfor %}
+};
+
+function toggle_section(show, section_name, update_required) {
+    if (show) {
+        $('#' + section_name + '').removeClass('hidden');
+        if (update_required) {
+            $('#' + section_name + ' .form-group').addClass('required');
+        }
+    } else {
+        $('#' + section_name + '').addClass('hidden');
+        if (update_required) {
+            $('#' + section_name + ' .form-group').removeClass('required');
+        }
+    }
+}
+
+$(document).ready(function() {
+    {% if form.subject_variant %}
+    /* Show price for selected variant */
+    $('input[type=radio][name={{ form.subject_variant.html_name }}]').change(function() {
+        {% for variant in form.instance.subject.all_variants %}
+        if (this.value == {{ variant.id }}) {
+            $('#price').text('{{ variant.price_text | escapejs }}');
+        }{% endfor %}
+    });
+    {% endif %}
+
+    {% for participant_form in form.participants_formset %}
+    /* Select participant */
+    $('input[type=radio][name={{ participant_form.prefix }}-participant_select-participant]').change(function() {
+        if (this.value == 'new') {
+            $('#id_{{ participant_form.prefix }}-first_name').val('');
+            $('#id_{{ participant_form.prefix }}-last_name').val('');
+            $('#id_{{ participant_form.prefix }}-citizenship').val('').change();
+            $('#id_{{ participant_form.prefix }}-birth_num').val('').change();
+            $('#id_{{ participant_form.prefix }}-birth_date').val('');
+            $('#id_{{ participant_form.prefix }}-gender').val('');
+            $('#id_{{ participant_form.prefix }}-age_group').val('').change();
+            $('#id_{{ participant_form.prefix }}-street').val('');
+            $('#id_{{ participant_form.prefix }}-city').val('');
+            $('#id_{{ participant_form.prefix }}-postal_code').val('');
+            $('#id_{{ participant_form.prefix }}-phone').val('');
+            $('#id_{{ participant_form.prefix }}-email').val('');
+            $('#id_{{ participant_form.prefix }}-school').val('').change();
+            $('#id_{{ participant_form.prefix }}-school_other').val('');
+            $('#id_{{ participant_form.prefix }}-school_class').val('');
+            $('#id_{{ participant_form.prefix }}-health').val('');
+            {% for question in participant_form.subject.all_questions %}
+            $('#id_{{ participant_form.prefix }}-questions-{{ question.slug }}').val('');
+            $('#id_{{ participant_form.prefix }}-questions-{{ question.slug }}').trigger('change');
+            {% endfor %}
+        }{% for participant in participant_form.user_participants %} else if (this.value == {{ participant.id }}) {
+            $('#id_{{ participant_form.prefix }}-first_name').val('{{ participant.first_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-last_name').val('{{ participant.last_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-citizenship').val('{{ participant.citizenship_id }}').change();
+            $('#id_{{ participant_form.prefix }}-birth_num').val('{% if participant.birth_num %}{{ participant.birth_num | escapejs }}{% endif %}').change();
+            $('#id_{{ participant_form.prefix }}-birth_date').data('DateTimePicker').date({{ participant.birth_date|jsdate }})
+            $('#id_{{ participant_form.prefix }}-gender').val('{{ participant.gender | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-age_group').val('{{ participant.age_group_id }}').change();
+            $('#id_{{ participant_form.prefix }}-street').val('{{ participant.street | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-city').val('{{ participant.city | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-postal_code').val('{{ participant.postal_code | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-phone').val('{{ participant.phone | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-email').val('{{ participant.email | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-school').val('{% if participant.school_other %}other{% else %}{{ participant.school_id }}{% endif %}').change();
+            $('#id_{{ participant_form.prefix }}-school_other').val('{{ participant.school_other | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-school_class').val('{{ participant.school_class | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-health').val('{{ participant.health | escapejs }}');
+            {% for key, value in participant.get_answers.items %}
+            $('#id_{{ participant_form.prefix }}-questions-{{ key }}').val('{{ value | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-questions-{{ key }}').trigger('change');
+            {% endfor %}
+        }{% endfor %}
+    });
+
+    /* Toggle first parent */
+    $('#id_{{ participant_form.prefix }}-has_parent1').change(function() {
+        toggle_section(this.checked, '{{ participant_form.prefix }}-parent1_form', true);
+    });
+    $('#id_{{ participant_form.prefix }}-has_parent1').trigger('change');
+
+    /* Toggle second parent */
+    $('#id_{{ participant_form.prefix }}-has_parent2').change(function() {
+        toggle_section(this.checked, '{{ participant_form.prefix }}-parent2_form', true);
+    });
+    $('#id_{{ participant_form.prefix }}-has_parent2').trigger('change');
+
+    /* Select first parent */
+    $('input[type=radio][name={{ participant_form.prefix }}-parent1_select-parent]').change(function() {
+        if (this.value == 'new') {
+            $('#id_{{ participant_form.prefix }}-parent1_first_name').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_last_name').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_street').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_city').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_postal_code').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_phone').val('');
+            $('#id_{{ participant_form.prefix }}-parent1_email').val('');
+        }{% for parent in participant_form.user_parents %} else if (this.value == {{ parent.id }}) {
+            $('#id_{{ participant_form.prefix }}-parent1_first_name').val('{{ parent.first_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_last_name').val('{{ parent.last_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_street').val('{{ parent.street | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_city').val('{{ parent.city | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_postal_code').val('{{ parent.postal_code | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_phone').val('{{ parent.phone | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent1_email').val('{{ parent.email | escapejs }}');
+        }{% endfor %}
+    });
+
+    /* Select second parent */
+    $('input[type=radio][name={{ participant_form.prefix }}-parent2_select-parent]').change(function() {
+        if (this.value == 'new') {
+            $('#id_{{ participant_form.prefix }}-parent2_first_name').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_last_name').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_street').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_city').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_postal_code').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_phone').val('');
+            $('#id_{{ participant_form.prefix }}-parent2_email').val('');
+        }{% for parent in participant_form.user_parents %} else if (this.value == {{ parent.id }}) {
+            $('#id_{{ participant_form.prefix }}-parent2_first_name').val('{{ parent.first_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_last_name').val('{{ parent.last_name | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_street').val('{{ parent.street | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_city').val('{{ parent.city | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_postal_code').val('{{ parent.postal_code | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_phone').val('{{ parent.phone | escapejs }}');
+            $('#id_{{ participant_form.prefix }}-parent2_email').val('{{ parent.email | escapejs }}');
+        }{% endfor %}
+    });
+
+    /* Set callback on citizenship change */
+    $('#id_{{ participant_form.prefix }}-citizenship').change(function() {
+        if (this.value) {
+            toggle_section(citizenship_requires_birth_num[this.value], '{{ participant_form.prefix }}-birth_num', true);
+            toggle_section(!citizenship_requires_birth_num[this.value], '{{ participant_form.prefix }}-birth_date', true);
+        }
+    });
+    $('#id_{{ participant_form.prefix }}-citizenship').trigger('change');
+
+    /* Set callback on birth number change */
+    $('#id_{{ participant_form.prefix }}-birth_num').change(function() {
+        birthDate = getBirthDate(this.value);
+        $('#id_{{ participant_form.prefix }}-birth_date').data('DateTimePicker').date(birthDate);
+    });
+
+    /* Set callback on birth number change */
+    $('#id_{{ participant_form.prefix }}-birth_date').on('dp.change', function(event) {
+        age = getAge(event.date._d);
+        child = !isNaN(age) && age < 18;
+        adult = isNaN(age) || age >= 18;
+        toggle_section(adult, '{{ participant_form.prefix }}-contact', true);
+        toggle_section(child, '{{ participant_form.prefix }}-parents', adult);
+        toggle_section(child, '{{ participant_form.prefix }}-parent1_switch', true);
+        $('#id_{{ participant_form.prefix }}-has_parent1').prop('checked', child).change();
+        $('#id_{{ participant_form.prefix }}-has_parent2').prop('checked', child).change();
+        if (adult) $('#id_{{ participant_form.prefix }}-has_parent2').prop('checked', false).change();
+        checkBirthDateAgeGroup(
+            '#id_{{ participant_form.prefix }}-birth_date',
+            '#id_{{ participant_form.prefix }}-age_group',
+        );
+    });
+
+    /* Set callback on school change */
+    $('#id_{{ participant_form.prefix }}-school').change(function() {
+        toggle_section(this.value == 'other', '{{ participant_form.prefix }}-school_other', true);
+    });
+    $('#id_{{ participant_form.prefix }}-school').trigger('change');
+
+    /* Set callback on age group change */
+    $('#id_{{ participant_form.prefix }}-age_group').change(function() {
+        toggle_section(age_groups[this.value] && age_groups[this.value].require_school, '{{ participant_form.prefix }}-school_details', true);
+        $('#id_{{ participant_form.prefix }}-school').trigger('change');
+        checkBirthDateAgeGroup(
+            '#id_{{ participant_form.prefix }}-birth_date',
+            '#id_{{ participant_form.prefix }}-age_group',
+        );
+    });
+    $('#id_{{ participant_form.prefix }}-age_group').trigger('change');
+    {% endfor %}
+
+    {% for group_form in form.group_formset %}
+    /* Set callback on group's school change */
+    $('#id_{{ group_form.prefix }}-school').change(function() {
+        toggle_section(this.value == 'other', '{{ group_form.prefix }}-school_other', true);
+    });
+    $('#id_{{ group_form.prefix }}-school').trigger('change');
+
+    /* Set callback on target group change */
+    $('#id_{{ group_form.prefix }}-target_group').change(function() {
+        toggle_section(target_groups[this.value] && target_groups[this.value].require_school, '{{ group_form.prefix }}-school_details', true);
+        $('#id_{{ group_form.prefix }}-school').trigger('change');
+    });
+    $('#id_{{ group_form.prefix }}-target_group').trigger('change');
+    {% endfor %}
+
+    /* Select billing info */
+    $('input[type=radio][name=billing_info_select-billing_info]').change(function() {
+        if (this.value == 'new') {
+            $('#id_billing_info-name').val('');
+            $('#id_billing_info-street').val('');
+            $('#id_billing_info-city').val('');
+            $('#id_billing_info-postal_code').val('');
+            $('#id_billing_info-company_num').val('');
+            $('#id_billing_info-vat_number').val('');
+            $('#id_billing_info-contact_person').val('');
+            $('#id_billing_info-phone').val('');
+            $('#id_billing_info-email').val('');
+            $('#id_billing_info-employee').val('');
+        }{% for billing_info in form.user_billing_info %} else if (this.value == {{ billing_info.id }}) {
+            $('#id_billing_info-name').val('{{ billing_info.name | escapejs }}');
+            $('#id_billing_info-street').val('{{ billing_info.street | escapejs }}');
+            $('#id_billing_info-city').val('{{ billing_info.city | escapejs }}');
+            $('#id_billing_info-postal_code').val('{{ billing_info.postal_code | escapejs }}');
+            $('#id_billing_info-company_num').val('{{ billing_info.company_num | escapejs }}');
+            $('#id_billing_info-vat_number').val('{{ billing_info.vat_number | escapejs }}');
+            $('#id_billing_info-contact_person').val('{{ billing_info.contact_person | escapejs }}');
+            $('#id_billing_info-phone').val('{{ billing_info.phone | escapejs }}');
+            $('#id_billing_info-email').val('{{ billing_info.email | escapejs }}');
+            $('#id_billing_info-employee').val('{{ billing_info.employee | escapejs }}');
+        }{% endfor %}
+        toggle_section(this.value != 'none', 'billing_info_form', false);
+    });
+});
+
+</script>
+{% endaddtoblock %}
+
+{% include 'leprikon/static/bootstrap-datetimepicker.html' %}
+{% else %}
+
+<h3>{% trans 'Select variant' %}</h3>
+
+{% for variant in view.available_variants %}
+<div class="row">
+    <div class="card" class="col-md-6">
+        <div class="card-header">
+            {{ variant.name }} | {{ variant.price_text }}
+        </div>
+        <div class="card-body">
+            {{ variant.description | safe }}
+            <a href="{% if view.registration_link %}{% url_with_back 'leprikon:registration_link_form' view.registration_link.slug variant.subject_id variant.id %}{% else %}{{ variant.get_registration_url }}{% endif %}" class="btn btn-primary">{% trans "Choose this variant" %}</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

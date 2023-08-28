@@ -1,0 +1,19 @@
+{% load static %}
+<img src="{% static 'img/smile-1.png' %}" id="img-smile-1" class="hidden cursor-follower" aria-hidden="true" alt=""/>
+<img src="{% static 'img/smile-2.png' %}" id="img-smile-2" class="hidden cursor-follower" aria-hidden="true" alt=""/>
+<img src="{% static 'img/smile-3.png' %}" id="img-smile-3" class="hidden cursor-follower" aria-hidden="true" alt=""/>
+<img src="{% static 'img/smile-4.png' %}" id="img-smile-4" class="hidden cursor-follower" aria-hidden="true" alt=""/>
+<img src="{% static 'img/smile-5.png' %}" id="img-smile-5" class="hidden cursor-follower" aria-hidden="true" alt=""/>
+<script>
+    var smiles = document.querySelectorAll("img.cursor-follower");
+    var smile = document.querySelector("img.cursor-follower");
+    window.addEventListener('mousemove', function(e) {
+        smiles.forEach(function (smile, index) {
+            window.setTimeout(function () {
+                smile.style.left = (e.pageX + 5) + 'px';
+                smile.style.top  = (e.pageY + 5) + 'px';
+                smile.classList.remove("hidden");
+            }, (index + 1) * (index + 1) * 50);
+        });
+    });
+</script>

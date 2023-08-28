@@ -1,0 +1,68 @@
+{% extends 'leprikon/default.html' %}
+{% load i18n cms_tags leprikon_tags sekizai_tags %}
+
+{% block content %}
+
+<h1>{% block title %}{{ title }}{% endblock %}</h1>
+
+{% if placeholder %}
+{% static_placeholder placeholder %}
+{% endif %}
+
+{{ instructions | safe }}
+
+{% if form.errors %}
+    <div class="alert alert-danger" role="alert">{% trans 'Please correct the highlighted errors below.' %}</div>
+{% endif %}
+{% for error in form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+{% endfor %}
+
+<form action="" method="{% if form.use_get %}get{% else %}post{% endif %}" class="form-horizontal">
+    {% if not form.use_get %}{% csrf_token %}{% endif %}
+    {% for ro in form.readonly_fields %}
+    <div class="row mb-3 required">
+        <label class="control-label col-md-3">{{ ro.label }}</label>
+        <div class="col-md-9">
+            <div class="form-control">{{ ro.value }}</div>
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for item in form %}
+        {% if form_item_template %}{% include form_item_template %}{% else %}{% include 'leprikon/form_item.html' %}{% endif %}
+    {% endfor %}
+
+    {% for inline_formset in form.inline_formsets %}
+        <h3>{{ inline_formset.model.Meta.verbose_name_plural|first_upper }}</h3>
+		{{ inline_formset.management_form }}
+		{{ inline_formset.non_form_errors }}
+        {% for form in inline_formset %}
+			<div class="inline {{ inline_formset.prefix }}">
+			{% for item in form %}
+                {% if item.is_hidden %}{{ item }}{% elif form_item_template %}{% include form_item_template %}{% else %}{% include 'leprikon/form_item.html' %}{% endif %}
+			{% endfor %}
+			</div>
+		{% endfor %}
+	{% endfor %}
+
+    <!-- SUBMIT -->
+    <div class="row mb-3">
+        <div class="col-md-9 col-md-offset-3">
+            <button class="btn btn-primary" type="submit">{{ submit_label }}</button>
+            {% if back_url %}
+            <a class="btn btn-default" href="{{ back_url }}">{{ back_label }}</a>
+            {% endif %}
+        </div>
+    </div>
+</form>
+
+{% addtoblock 'css' %}
+{{ form.media.css }}
+{% endaddtoblock %}
+
+{% addtoblock 'js' %}
+{{ form.media.js }}
+{% endaddtoblock %}
+
+{% endblock %}

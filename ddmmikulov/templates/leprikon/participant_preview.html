@@ -1,0 +1,48 @@
+{% load i18n leprikon_tags static %}
+<div class="card card-participant">
+    <div class="card-header">
+        <strong>{{ object.full_name }}</strong>
+        <small>({{ object.birth_date }})</small>
+        <a class="btn btn-primary btn-sm" href="{% url_with_back 'leprikon:participant_update' object.id %}">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            {% trans 'edit' %}
+        </a>
+        <a class="btn btn-primary btn-sm" href="{% url_with_back 'leprikon:participant_delete' object.id %}">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            {% trans 'delete' %}
+        </a>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Age group' %}:</label>
+            <div class="col-sm-8">
+                {{ object.age_group }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Address' %}:</label>
+            <div class="col-sm-8">
+                {{ object.address }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Contact' %}:</label>
+            <div class="col-sm-8">
+                {{ object.contact }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">{% trans 'School' %}:</label>
+            <div class="col-sm-8">
+                {{ object.school_and_class }}
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">{% trans 'Health' %}:</label>
+            <div class="col-sm-8">
+                {{ object.health | linebreaks }}
+            </div>
+        </div>
+    </div>
+</div>
