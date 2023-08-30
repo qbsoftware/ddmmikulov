@@ -10,10 +10,10 @@
     window.addEventListener('mousemove', function(e) {
         smiles.forEach(function (smile, index) {
             window.setTimeout(function () {
-                smile.style.left = (e.pageX + 5) + 'px';
-                smile.style.top  = (e.pageY + 5) + 'px';
+                smile.style.left = (e.pageX + 10 + (index * 70) + (index * index * 5)) + 'px';
+                smile.style.top  = (e.pageY + 10 - (index * 15) + (index * index * 5)) + 'px';
                 smile.classList.remove("hidden");
-            }, (index + 1) * (index + 1) * 50);
+            }, (index + 1) * 200);
         });
     });
 </script>
