@@ -168,7 +168,6 @@ input.form-control[type="radio"] {
 .card-body {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding-top: 0;
 }
 
