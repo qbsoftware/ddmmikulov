@@ -1,0 +1,26 @@
+{% load i18n thumbnail %}
+
+<div class="gallery d-flex flex-wrap gap-3">
+{% for file in folder_files %}
+    {% if file.file_type == "Image" %}
+    <a href="{{ file.url }}"
+        {% if instance.link_target %} target="{{ instance.link_target }}"{% endif %}
+        {{ instance.attributes_str }}>
+        <img class="img-thumbnail rounded" src="{% thumbnail file 125x125 crop %}" alt="file.name"/>
+    </a>
+    {% endif %}
+{% endfor %}
+</div>
+
+{% include "gallery.html" %}
+
+{% comment %}
+    # https://github.com/divio/django-filer/blob/master/filer/models/filemodels.py
+    {{ instance.folder_src }}
+    {{ instance.get_files }} or {{ folder_files }}
+    # Available variables:
+    {{ instance.template }}
+    {{ instance.link_target }}
+    {{ instance.show_file_size }}
+    {{ instance.attributes_str }}
+{% endcomment %}

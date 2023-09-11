@@ -21,8 +21,10 @@ from django.contrib.sites.models import Site
 from django.urls import include, path
 from django.shortcuts import redirect
 
+
 def redirect_cz(request, path=""):
     return redirect(f"/{path}")
+
 
 try:
     urlpatterns = [

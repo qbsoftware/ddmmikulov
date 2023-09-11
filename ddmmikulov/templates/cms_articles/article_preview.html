@@ -1,0 +1,16 @@
+{% load cms_articles thumbnail %}
+<div class="card card-article">
+    <a href="{{ article.get_absolute_url }}" title="{{ article.order_date }}">
+        {% with image=article.get_image %}
+            {% if image %}
+            <img class="card-img-top" alt="{{ image.name }}" src="{% thumbnail image 400x400 crop %}" />
+            {% else %}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"></svg>
+            {% endif %}
+        {% endwith %}
+        <div class="card-title">{{ article.get_menu_title }}</div>
+    </a>
+    <div class="card-body">
+        {{ article.get_description | safe }}
+    </div>
+</div>

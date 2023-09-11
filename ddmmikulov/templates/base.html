@@ -27,7 +27,7 @@
     {% cms_toolbar %}
     <header>
         <div class="header-brand">
-            <a href="https://www.ddmmikulov.cz/" class="logo" title="DDM Mikulov">
+            <a href="/" class="logo" title="DDM Mikulov">
                 <img src="{% static 'img/logo.png' %}" alt="DDM Mikulov"/>
             </a>
         </div>
@@ -48,14 +48,18 @@
         </div>
     </header>
     <main>
-        {% block base_content %}{% endblock %}
+        {% block base_content %}
+        {% block content %}
+        {% placeholder "content" %}
+        {% endblock %}
+        {% endblock %}
         {% if request.path == '/' %}{% include "follow-cursor.html" %}{% endif %}
     </main>
     <footer>
         <div class="container">
             <div class="row">
                 <div class="footer-logo col-sm-3">
-                    <a href="https://www.ddmmikulov.cz/" class="logo" title="DDM Mikulov">
+                    <a href="/" class="logo" title="DDM Mikulov">
                         <img src="{% static 'img/logo.png' %}" alt="DDM Mikulov">
                     </a>
                 </div>

@@ -1,0 +1,24 @@
+{% load i18n cms_articles %}
+
+<div class="d-grid gap-3 cards-list">
+{% for article in articles %}
+{% include 'cms_articles/article_preview.html' %}
+{% empty %}
+<p style="grid-column-end: span 3;">Zatím tu žádné aktuality nejsou.</p>
+{% endfor %}
+</div>
+
+{% if articles.paginator.num_pages > 1 %}
+<div class="btn-group m-3">
+    <a class="btn btn-sm btn-default{% if articles.has_previous %}" href="{% url_page articles.previous_page_number %}{% else %} disabled{% endif %}" title="{% trans 'previous' %}">
+        &lt;
+    </a>
+    <span class="btn btn-sm btn-default"><strong>{{ articles.number }}</strong></span>
+    <a class="btn btn-sm btn-default{% if articles.has_next %}" href="{% url_page articles.next_page_number %}{% else %} disabled{% endif %}" title="{% trans 'next' %}">
+        &gt;
+    </a>
+</div>
+{% with from=articles.start_index until=articles.end_index count=articles.paginator.count %}
+{% blocktrans %}displaying {{ from }} – {{ until }} of {{ count }}{% endblocktrans %}
+{% endwith %}
+{% endif %}

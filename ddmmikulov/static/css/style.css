@@ -88,7 +88,8 @@ header .header-authentication {
   border-color: #153996;
 }
 
-.dropdown-school-year .btn {
+.dropdown-school-year .btn,
+.btn-pink {
   color: #fff;
   background-color: #E1327A;
   border-color: #E1327A;
@@ -312,4 +313,9 @@ img.cursor-follower {
   width: 64px;
   height: 64px;
   overflow: hidden;
+}
+
+.article .detail-image {
+  float: right;
+  margin: 15px 15px 30px 30px;
 }

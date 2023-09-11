@@ -1,0 +1,59 @@
+{% load sekizai_tags staticfiles %}
+
+{% addtoblock 'css' %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/3.4.0/css/blueimp-gallery.min.css" integrity="sha512-8z9zEPEYVxCX7hdM+6hA0RMSW42V+XtqsyXSbNkujXYclFqhRV8J4+MasIpuYZODoHJuQgxGjcRKm//sWEQm6w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endaddtoblock %}
+
+{% addtoblock 'js' %}
+<!-- The Gallery as lightbox dialog, should be a document body child element -->
+<div
+  id="blueimp-gallery"
+  class="blueimp-gallery blueimp-gallery-controls"
+  aria-label="fotogalerie"
+  aria-modal="true"
+  role="dialog"
+>
+  <div class="slides" aria-live="polite"></div>
+  <h3 class="title"></h3>
+  <a
+    class="prev"
+    aria-controls="blueimp-gallery"
+    aria-label="předchozí snímek"
+    aria-keyshortcuts="ArrowLeft"
+  ></a>
+  <a
+    class="next"
+    aria-controls="blueimp-gallery"
+    aria-label="následující snímek"
+    aria-keyshortcuts="ArrowRight"
+  ></a>
+  <a
+    class="close"
+    aria-controls="blueimp-gallery"
+    aria-label="close"
+    aria-keyshortcuts="Escape"
+  ></a>
+  <a
+    class="play-pause"
+    aria-controls="blueimp-gallery"
+    aria-label="spustit prezentaci"
+    aria-keyshortcuts="Space"
+    aria-pressed="false"
+    role="button"
+  ></a>
+  <ol class="indicator"></ol>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-gallery/3.4.0/js/blueimp-gallery.min.js" integrity="sha512-Tt9Ui0O6Sg6FjAK5XpAIM7PCMhaXCL+i13IHLZYuluoDXlesfg+JzVI86rgUU2YnfEz2ZEDHXkRkPnHlyWnqzg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.querySelectorAll(".gallery").forEach(function (element) {
+        element.onclick = function (event) {
+            event = event || window.event;
+            var target = event.target || event.srcElement;
+            var link = target.src ? target.parentNode : target;
+            var options = { index: link, event: event };
+            var links = this.getElementsByTagName('a');
+            blueimp.Gallery(links, options);
+        }
+    });
+</script>
+{% endaddtoblock %}

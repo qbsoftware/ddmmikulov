@@ -1,0 +1,9 @@
+{% load i18n cms_articles %}
+
+<div class="d-grid gap-3 cards-list">
+{% for article in articles %}
+{% include 'cms_articles/article_preview.html' %}
+{% empty %}
+<p style="grid-column-end: span 3;">Zatím tu žádné aktuality nejsou.</p>
+{% endfor %}
+</div>
