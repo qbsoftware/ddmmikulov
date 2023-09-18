@@ -3,9 +3,9 @@
 <div class="card card-{{ object.subject_type.subject_type }} card-{{ object.subject_type.slug }}">
     <a href="{{ object.get_absolute_url }}">
         {% if object.photo %}
-        <img class="card-img-top" alt="{{ object.photo.name }}" src="{% thumbnail object.photo 400x400 crop %}" />
+        <img class="card-img-top" alt="{{ object.photo.name }}" src="{% thumbnail object.photo 350x350 crop upscale %}" />
         {% else %}
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 350"></svg>
         {% endif %}
         <div class="card-title">{{ object.display_name }}</div>
     </a>

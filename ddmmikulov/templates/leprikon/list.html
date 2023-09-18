@@ -10,7 +10,11 @@
 </div>
 {% endif %}
 
-<div class="{% if form %}list-list{% else %}container{% endif %}">
+{% if form %}
+<div class="list-list">
+{% endif %}
+
+<div class="container">
 
 <h1>{% block title %}{{ title|first_upper }}{% endblock %}</h1>
 
@@ -42,7 +46,6 @@
 </div>
 
 {% if form %}
-<div><!-- GAP right --></div>
 </div>
 {% endif %}
 

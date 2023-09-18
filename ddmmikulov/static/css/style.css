@@ -131,6 +131,11 @@ footer img {
   margin: 15px;
 }
 
+footer img.fb {
+  width: 30%;
+  margin: 15px;
+}
+
 a,
 a:visited,
 a:active,
@@ -159,6 +164,7 @@ input.form-control[type="radio"] {
 .card {
   border-radius: 2rem;
   margin: 15px;
+  max-width: 350px;
 }
 
 .card .card-img-top {
@@ -206,32 +212,6 @@ input.form-control[type="radio"] {
   text-align: right;
 }
 
-@media (min-width: 800px) {
-  .container-list-form {
-    display: flex;
-    flex-direction: row;
-    gap: 25px;
-  }
-  .list-form {
-    max-width: 300px;
-  }
-  .cards-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (min-width: 1000px) {
-  .cards-list {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 1600px) {
-  .cards-list {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
 .list-form {
   background-color: #F6C452;
   padding: 25px;
@@ -272,7 +252,7 @@ input.form-control[type="radio"] {
 }
 
 [data-bs-toggle="collapse"] {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .hidden {
@@ -318,4 +298,70 @@ img.cursor-follower {
 .article .detail-image {
   float: right;
   margin: 15px 15px 30px 30px;
+}
+
+@media (min-width: 576px) {
+  .container-list-form {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+  .list-form {
+    max-width: 250px;
+  }
+  .list-list {
+    flex-grow: 1;
+  }
+  .list-list > .container {
+    max-width: 260px;
+  }
+  .cards-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .list-form {
+    max-width: 300px;
+  }
+  .list-list > .container {
+    max-width: 420px;
+  }
+  .cards-list {
+    grid-template-columns: 1fr 1fr;
+  }
+  .list-list .cards-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 992px) {
+  .list-form {
+    max-width: 300px;
+  }
+  .list-list > .container {
+    max-width: 660px;
+  }
+  .cards-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .list-list .cards-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
+  .list-list > .container {
+    max-width: 860px;
+  }
+  .cards-list,
+  .list-list .cards-list {
+      grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1400px) {
+  .list-list > .container {
+    max-width: 1060px;
+  }
 }

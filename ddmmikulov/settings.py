@@ -41,7 +41,10 @@ CMS_TEMPLATES = [
 ]
 
 # templates used to render plugin article
-CMS_ARTICLES_TEMPLATES = [("cms_articles/default.html", "Výchozí")]
+CMS_ARTICLES_TEMPLATES = [
+    ("cms_articles/default.html", "Výchozí"),
+    ("cms_articles/image.html", "S obrázkem"),
+]
 
 CMS_ARTICLES_PLUGIN_ARTICLE_TEMPLATES = [
     ("default", "Výchozí"),
