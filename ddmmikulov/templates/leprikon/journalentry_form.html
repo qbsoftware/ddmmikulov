@@ -1,0 +1,77 @@
+{% extends 'leprikon/form.html' %}
+{% load i18n sekizai_tags static %}
+
+{% block content %}
+{{ block.super }}
+
+{% include 'leprikon/static/bootstrap-datetimepicker.html' %}
+{% include 'leprikon/static/bootstrap-multiselect.html' %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('#id_leaders').selectpicker({
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        selectAllText: '{% trans 'select all' %}',
+        nonSelectedText: '',
+        allSelectedText: '{% trans 'all' %}',
+        numberDisplayed: 4,
+        nSelectedText: '{% trans 'selected' %}',
+    });
+
+    $('#id_alternates').attr("data-live-search", "true");
+    $('#id_alternates').selectpicker({
+        enableFiltering: true,
+        filterPlaceholder: '{% trans 'Search' %}',
+        includeSelectAllIfMoreThan: 3,
+        selectAllText: '{% trans 'select all' %}',
+        nonSelectedText: '',
+        allSelectedText: '{% trans 'all' %}',
+        numberDisplayed: 4,
+        nSelectedText: '{% trans 'selected' %}',
+    });
+
+    $('#id_participants').attr("data-live-search", "true");
+    $('#id_participants').selectpicker({
+        enableFiltering: true,
+        filterPlaceholder: '{% trans 'Search' %}',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        selectAllText: '{% trans 'select all' %}',
+        nonSelectedText: '',
+        allSelectedText: '{% trans 'all' %}',
+        numberDisplayed: 4,
+        nSelectedText: '{% trans 'selected' %}',
+    });
+
+    $('#id_participants_instructed').attr("data-live-search", "true");
+    $('#id_participants_instructed').selectpicker({
+        enableFiltering: true,
+        filterPlaceholder: '{% trans 'Search' %}',
+        includeSelectAllOption: true,
+        includeSelectAllIfMoreThan: 3,
+        selectAllText: '{% trans 'select all' %}',
+        nonSelectedText: '',
+        allSelectedText: '{% trans 'all' %}',
+        numberDisplayed: 4,
+        nSelectedText: '{% trans 'selected' %}',
+    });
+
+    $('#id_date').on('dp.change', function(e) {
+        d = e.date.toDate();
+        date = `${d.getFullYear()}-${(d.getMonth()+101).toString().slice(1)}-${(d.getDate()+100).toString().slice(1)}`;
+        $.getJSON(`{% url 'api:journal-participants' form.instance.journal.id %}?date=${date}`, function(result) {
+            result = result.map(function (item) { return {value: item.id, label: item.label} });
+            $('#id_participants').selectpicker('dataprovider', result);
+            $('#id_participants_instructed').selectpicker('dataprovider', result);
+        });
+    });
+
+});
+
+</script>
+{% endaddtoblock %}
+
+{% endblock %}
