@@ -6,11 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from leprikon.site.settings import *
 from django import forms
 
-# hack Django's default date and time input widgets to use appropriate input type
-forms.DateInput.input_type = "date"
-forms.TimeInput.input_type = "time"
-forms.DateTimeInput.input_type = "datetime-local"
-
 
 # Application definition
 INSTALLED_APPS = (
