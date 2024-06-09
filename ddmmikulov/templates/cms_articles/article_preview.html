@@ -3,7 +3,7 @@
     <a href="{{ article.get_absolute_url }}" title="{{ article.order_date }}">
         {% with image=article.get_image %}
             {% if image %}
-            <img class="card-img-top" alt="{{ image.name }}" src="{% thumbnail image 350x350 crop upscale %}" />
+            <img class="card-img-top" alt="{{ image.name }}" src="{% thumbnail image 350x350 crop upscale subject_location=image.subject_location %}" />
             {% else %}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 350"></svg>
             {% endif %}

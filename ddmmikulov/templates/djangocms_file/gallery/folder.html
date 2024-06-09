@@ -6,7 +6,7 @@
     <a href="{{ file.url }}"
         {% if instance.link_target %} target="{{ instance.link_target }}"{% endif %}
         {{ instance.attributes_str }}>
-        <img class="img-thumbnail rounded" src="{% thumbnail file 125x125 crop %}" alt="file.name"/>
+        <img class="img-thumbnail rounded" src="{% thumbnail file 125x125 crop subject_location=file.subject_location %}" alt="file.name"/>
     </a>
     {% endif %}
 {% endfor %}
