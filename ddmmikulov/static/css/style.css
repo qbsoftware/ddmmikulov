@@ -131,9 +131,13 @@ footer img {
   margin: 15px;
 }
 
+footer img.eu {
+  width: 80%;
+  margin: 10px;
+}
+
 footer img.fb {
   width: 30%;
-  margin: 15px;
 }
 
 a,
