@@ -1,0 +1,18 @@
+{% load sekizai_tags static %}
+
+{% addtoblock "js" %}
+<script type="text/javascript">
+$(function () {
+    $('input[data-type=DateField]').each(
+        function (_, input) {
+            input.type = 'date';
+        }
+    );
+    $('input[data-type=TimeField]').each(
+        function (_, input) {
+            input.type = 'time';
+        }
+    );
+});
+</script>
+{% endaddtoblock %}

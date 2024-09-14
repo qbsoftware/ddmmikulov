@@ -240,11 +240,12 @@ function removeError(objId) {
 }
 
 function checkBirthDateAgeGroup(birthDateId, ageGroupId) {
-    ok = true;
-    dp = $(birthDateId).data('DateTimePicker');
-    if (dp && dp.date()) {
-        age = getAge(dp.date()._d);
-        ageGroup = age_groups[$('#id_participants-0-age_group').val()];
+    let ok = true;
+    let birthDate = new Date(document.getElementById(birthDateId.substring(1)).value);
+
+    if (birthDate) {
+        let age = getAge(birthDate);
+        let ageGroup = age_groups[$('#id_participants-0-age_group').val()];
         if (age && ageGroup) {
             if (ageGroup.min_age && age < ageGroup.min_age) {
                 addError(
@@ -339,7 +340,7 @@ $(document).ready(function() {
             $('#id_{{ participant_form.prefix }}-last_name').val('{{ participant.last_name | escapejs }}');
             $('#id_{{ participant_form.prefix }}-citizenship').val('{{ participant.citizenship_id }}').change();
             $('#id_{{ participant_form.prefix }}-birth_num').val('{% if participant.birth_num %}{{ participant.birth_num | escapejs }}{% endif %}').change();
-            $('#id_{{ participant_form.prefix }}-birth_date').data('DateTimePicker').date({{ participant.birth_date|jsdate }})
+            $('#id_{{ participant_form.prefix }}-birth_date').val('{{ participant.birth_date|date:"Y-m-d" }}').change();
             $('#id_{{ participant_form.prefix }}-gender').val('{{ participant.gender | escapejs }}');
             $('#id_{{ participant_form.prefix }}-age_group').val('{{ participant.age_group_id }}').change();
             $('#id_{{ participant_form.prefix }}-street').val('{{ participant.street | escapejs }}');
@@ -422,16 +423,10 @@ $(document).ready(function() {
     $('#id_{{ participant_form.prefix }}-citizenship').trigger('change');
 
     /* Set callback on birth number change */
-    $('#id_{{ participant_form.prefix }}-birth_num').change(function() {
-        birthDate = getBirthDate(this.value);
-        $('#id_{{ participant_form.prefix }}-birth_date').data('DateTimePicker').date(birthDate);
-    });
-
-    /* Set callback on birth number change */
-    $('#id_{{ participant_form.prefix }}-birth_date').on('dp.change', function(event) {
-        age = getAge(event.date._d);
-        child = !isNaN(age) && age < 18;
-        adult = isNaN(age) || age >= 18;
+    $('#id_{{ participant_form.prefix }}-birth_date').change(function() {
+        let age = getAge(new Date(this.value));
+        let child = !isNaN(age) && age < 18;
+        let adult = isNaN(age) || age >= 18;
         toggle_section(adult, '{{ participant_form.prefix }}-contact', true);
         toggle_section(child, '{{ participant_form.prefix }}-parents', adult);
         toggle_section(child, '{{ participant_form.prefix }}-parent1_switch', true);
