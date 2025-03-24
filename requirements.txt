@@ -2,4 +2,5 @@ Whoosh
 aldryn-search
 django-cms-articles
 djangocms-bootstrap5
+djangocms-link<5
 leprikon
