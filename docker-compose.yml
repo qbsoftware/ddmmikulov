@@ -60,7 +60,7 @@ services:
     image: juanluisbaptiste/postfix
     environment:
       SERVER_HOSTNAME: leprikon.cz
-      SMTP_SERVER: smtp.savana.cz
+      SMTP_SERVER: mail.webglobe.cz
       SMTP_PORT: 465
       SMTP_USERNAME: ddmmikulov@leprikon.cz
       SMTP_PASSWORD: emailpassword
